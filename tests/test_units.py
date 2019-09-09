@@ -1,20 +1,19 @@
 import pytest
 
-from mmsdm import form_mmsdm_url
-from reports import form_report_url
+from nemdata.use_cases import form_report_url
 
 
-@pytest.mark.parametrize(
-    'year, month, expected',
-    [
-        (2018, 1, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2018/MMSDM_2018_01.zip'),
-        (2018, 1, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2018/MMSDM_2018_01.zip'),
-        (2012, 12, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2012/MMSDM_2012_12.zip')
-    ]
-)
-def test_form_mmsdm_url(year, month, expected):
-    url = form_mmsdm_url(year, month)
-    assert url == expected
+# @pytest.mark.parametrize(
+#     'year, month, expected',
+#     [
+#         (2018, 1, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2018/MMSDM_2018_01.zip'),
+#         (2018, 1, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2018/MMSDM_2018_01.zip'),
+#         (2012, 12, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2012/MMSDM_2012_12.zip')
+#     ]
+# )
+# def test_form_mmsdm_url(year, month, expected):
+#     url = form_mmsdm_url(year, month)
+#     assert url == expected
 
 
 @pytest.mark.parametrize(
