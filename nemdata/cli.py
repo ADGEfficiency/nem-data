@@ -1,6 +1,8 @@
 import argparse
+import os
 
-from use_cases import main as use_cases
+from nemdata.databases import Files
+from nemdata.use_cases import main as use_cases
 
 
 def setup_parser():
@@ -14,9 +16,10 @@ def setup_parser():
 
 if __name__ == '__main__':
     args = setup_parser()
-    if args.report == 'all':
-        report = reports[-1][1]
+    print(args)
 
-    db = Files(report, start, end)
+    start = args.start
+    end = args.end
+    report = args.report
 
-    use_cases(report, args.start, args.end, db)
+    use_cases(report, start, end, Files(report))

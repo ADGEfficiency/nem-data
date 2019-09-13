@@ -1,7 +1,15 @@
 ## Usage
 
 ```bash
-nem-data get interconnector 2018-01 2019-01
+python nemdata/cli.py --report interconnector --start 2018-01 --end 2018-03
+
+python nemdata/cli.py --report nemde
+```
+
+## Setup
+
+```bash
+python setup.py install
 ```
 
 ## Who is `nem-data` for
@@ -11,7 +19,7 @@ Researchers & data scientists who want access to the most useful data supplied b
 ##  Philosophy
 
 Only download what is needed
-- not the entire mms, just the report
+- not the entire mmsdm, just the report
 - don't download twice
 
 Clean architecture - use cases, interfaces

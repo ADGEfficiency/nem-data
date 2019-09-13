@@ -1,19 +1,29 @@
 import pytest
 
-from nemdata.use_cases import form_report_url
+from nemdata.mmsdm import form_report_url
+from nemdata.nemde import form_nemde_url
 
 
-# @pytest.mark.parametrize(
-#     'year, month, expected',
-#     [
-#         (2018, 1, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2018/MMSDM_2018_01.zip'),
-#         (2018, 1, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2018/MMSDM_2018_01.zip'),
-#         (2012, 12, 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2012/MMSDM_2012_12.zip')
-#     ]
-# )
-# def test_form_mmsdm_url(year, month, expected):
-#     url = form_mmsdm_url(year, month)
-#     assert url == expected
+@pytest.mark.parametrize(
+    'year, month, day, expected',
+    [
+        (
+            2019, 1, 1,
+            'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/NEMDE/2019/NEMDE_2019_01/NEMDE_Market_Data/NEMDE_Files/NemPriceSetter_20190101_xml.zip'
+         ),
+        (
+            2018, 11, 31,
+            'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/NEMDE/2018/NEMDE_2018_11/NEMDE_Market_Data/NEMDE_Files/NemPriceSetter_20181131_xml.zip'
+        ),
+        (
+            2009, 8, 22,
+        'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/NEMDE/2009/NEMDE_2009_08/NEMDE_Market_Data/NEMDE_Files/NemPriceSetter_20090822_xml.zip'
+        )
+    ]
+)
+def test_form_nemde_url(year, month, day, expected):
+    url = form_nemde_url(year, month, day)
+    assert url == expected
 
 
 @pytest.mark.parametrize(
