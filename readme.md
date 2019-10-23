@@ -1,5 +1,7 @@
 ## Usage
 
+Will download data into `$HOME/nem-data/interconnector` etc:
+
 ```bash
 python nemdata/cli.py --report interconnector --start 2018-01 --end 2018-03
 

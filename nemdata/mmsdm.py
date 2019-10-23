@@ -15,7 +15,7 @@ def clean_report(input_file, output_file):
     raw = pd.read_csv(input_file, skiprows=1)
     #  remove last row via iloc
     raw = raw.iloc[:-1, :]
-    raw.to_csv(output_file)
+    raw.to_csv(output_file, index=False)
 
 
 def download_reports(report, start, end, db=None):
@@ -24,13 +24,8 @@ def download_reports(report, start, end, db=None):
     for year, month in zip(months.year, months.month):
         url = form_report_url(year, month, report)
 
-        db.setup('{}-{}'.format(year, month))
-
-        folder = os.path.join(db.folder, '{}-{}'.format(year, month))
-        os.makedirs(folder, exist_ok=True)
-        z_file = os.path.join(folder, '{}.zip'.format(report))
-
-        print(url)
+        sub_dir = db.setup('{}-{}'.format(year, month))
+        z_file = os.path.join(sub_dir, '{}.zip'.format(report))
 
         if os.path.isfile(z_file):
             print('not downloading {}'.format(url))
@@ -38,23 +33,22 @@ def download_reports(report, start, end, db=None):
         else:
             print('downloading {}'.format(url))
             f = scrape_url(url, z_file)
-            unzip_file(z_file, folder)
+            unzip_file(z_file, sub_dir)
 
             clean_report(
-                input_file=os.path.join(folder, os.path.splitext(url.split('/')[-1])[0]+'.CSV'),
-                output_file=os.path.join(folder, '{}.csv'.format(report))
+                input_file=os.path.join(sub_dir, os.path.splitext(url.split('/')[-1])[0]+'.CSV'),
+                output_file=os.path.join(sub_dir, 'clean.csv'.format(report))
             )
 
 
 def main(report, start, end, db):
-    reports = [
-        ('trading', 'TRADINGPRICE'),
-        ('unit-scada', 'UNIT_SCADA'),
-        ('dispatch', 'DISPATCHPRICE'),
-        ('demand', 'DISPATCHREGIONSUM'),
-        ('interconnectors', 'DISPATCHINTERCONNECTORRES')
-    ]
-
-    report = reports[-1][1]
+    reports = {
+        'trading': 'TRADINGPRICE',
+        'unit-scada': 'UNIT_SCADA',
+        'dispatch': 'DISPATCHPRICE',
+        'demand': 'DISPATCHREGIONSUM',
+        'interconnectors': 'DISPATCHINTERCONNECTORRES'
+    }
+    report = reports[report]
 
     uc = download_reports(report, start, end, db)

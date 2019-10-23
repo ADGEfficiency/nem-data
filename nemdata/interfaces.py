@@ -12,6 +12,7 @@ def scrape_url(url, output_file):
     """ Downloads a file from a url using requests """
     with open(output_file, 'wb') as f:
         response = requests.get(url, headers=header, stream=True)
+        assert response.status_code == 200
         total_length = response.headers.get('content-length')
 
         if total_length is None:
@@ -34,5 +35,8 @@ def scrape_url(url, output_file):
 
 def unzip_file(file_path, output_path):
     """ unzips a file from one path to an output path using stdlib """
-    with zipfile.ZipFile(file_path, 'r') as my_zipfile:
-        my_zipfile.extractall(output_path)
+    try:
+        with zipfile.ZipFile(file_path, 'r') as my_zipfile:
+            my_zipfile.extractall(output_path)
+    except zipfile.BadZipFile:
+        print('{} not a ZipFile'.format(file_path))

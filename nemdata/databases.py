@@ -2,14 +2,17 @@ import os
 
 
 class Files:
+    """ Uses the Unix filesystem """
     def __init__(self, name):
         self.name = name
-
-    def setup(self, name):
-        self.folder = os.path.join(
+        self.root = os.path.join(
             os.environ['HOME'],
             'nem-data',
-            self.name,
-            name
+            self.name
         )
-        os.makedirs(self.folder, exist_ok=True)
+        os.makedirs(self.root, exist_ok=True)
+
+    def setup(self, name):
+        sub = os.path.join(self.root, name)
+        os.makedirs(sub, exist_ok=True)
+        return sub
