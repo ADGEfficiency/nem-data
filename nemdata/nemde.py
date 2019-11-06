@@ -18,7 +18,7 @@ def main(start, end, db=None):
         url = form_nemde_url(year, month, day)
 
         z_file = os.path.join(
-            db.folder,
+            db.root,
             '{}-{}-{}.zip'.format(year, month, day)
         )
 
@@ -28,7 +28,9 @@ def main(start, end, db=None):
         else:
             print('downloading {}'.format(url))
             f = scrape_url(url, z_file)
-            unzip_file(z_file, db.folder)
+            unzip_file(z_file, db.root)
+
+        print(' ')
 
 
 if __name__ == '__main__':

@@ -30,6 +30,7 @@ def scrape_url(url, output_file):
                     '\r {}% [{}{}]'.format(2*done, '+'*done, ' '*(50-done))
                 )
                 sys.stdout.flush()
+    print(' ')
     return f
 
 

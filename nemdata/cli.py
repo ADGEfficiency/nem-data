@@ -16,6 +16,7 @@ def setup_parser():
 
 if __name__ == '__main__':
     print('Hello from nemdata :)')
+    print(' ')
     args = setup_parser()
     print(args)
 
