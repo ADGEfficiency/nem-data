@@ -1,27 +1,24 @@
-import argparse
-import os
+import click
 
 from nemdata.databases import Files
 from nemdata.use_cases import main as use_cases
+from nemdata.mmsdm import reports as mmsdm_reports
 
 
-def setup_parser():
-    """ cil interface """
-    parser = argparse.ArgumentParser(description='start and end months')
-    parser.add_argument('--start', type=str, default='2018-01', nargs='?')
-    parser.add_argument('--end', type=str, default='2019-01', nargs='?')
-    parser.add_argument('--report', type=str, default='all', nargs='?')
-    return parser.parse_args()
+@click.command()
+@click.option(
+    '--start', '-s', default='2018-01', help='start date (YYYY-MM)'
+)
+@click.option(
+    '--end', '-e', default='2019-01', help='end date (incusive) (YYYY-MM)'
+)
+@click.option(
+    '--reports', '-r', multiple=True, default='nemde', help='nemde, '+', '.join(mmsdm_reports.keys())
+)
+def main(start, end, reports):
+    """nem-data is a tool to access NEM data"""
+    click.echo('Hello from nem-data :)')
+    click.echo(' ')
 
-
-if __name__ == '__main__':
-    print('Hello from nemdata :)')
-    print(' ')
-    args = setup_parser()
-    print(args)
-
-    start = args.start
-    end = args.end
-    report = args.report
-
-    use_cases(report, start, end, Files(report))
+    for report in reports:
+        use_cases(report, start, end, Files(report))

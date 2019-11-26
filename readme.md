@@ -1,12 +1,8 @@
-## Usage
+# `nem-data`
 
-Will download data into `$HOME/nem-data/interconnector` etc:
+A simple command line tool to access Australian National Energy Market (NEM) data provided by the Australian Energy Market Operator (AEMO).
 
-```bash
-python nemdata/cli.py --report interconnector --start 2018-01 --end 2018-03
-
-python nemdata/cli.py --report nemde
-```
+For more background on this project read the [project page on Climate Code]().
 
 ## Setup
 
@@ -14,14 +10,16 @@ python nemdata/cli.py --report nemde
 python setup.py install
 ```
 
-## Who is `nem-data` for
+## Usage
 
-Researchers & data scientists who want access to the most useful data supplied by AEMO for the NEM.
+To download the Downloads data into `$HOME/nem-data/interconnector`:
 
-##  Philosophy
+```bash
+nemdata --report interconnector --start 2018-01 --end 2018-03
+```
 
-Only download what is needed
-- not the entire mmsdm, just the report
-- don't download twice
+Downloads data into `$HOME/nem-data/nemde`:
 
-Clean architecture - use cases, interfaces
+```bash
+nemdata --report nemde
+```

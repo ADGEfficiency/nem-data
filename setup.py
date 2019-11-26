@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='nemdata',
-    version='0.0.1',
+    version='0.0.2',
 
     description='downloading useful data for the Australian NEM',
     author='Adam Green',
@@ -14,9 +14,9 @@ setup(
 
     # setup_requires=['pytest-runner'],
     # tests_require=['pytest'],
-    # install_requires=['Click'],
-    # entry_points='''
-    #         [console_scripts]
-    #         energypy-experiment=energypy.experiments.cli:cli
-    #     '''
+    install_requires=['Click'],
+    entry_points='''
+            [console_scripts]
+            nem=nemdata.cli:main
+        '''
 )

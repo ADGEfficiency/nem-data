@@ -1,7 +1,3 @@
-
----
-
-
 - plot the flow through interconnector versus the loss factor
 
 [Design of the NEM](http://www.ceem.unsw.edu.au/sites/default/files/event/documents/ceem-nemdesign.pdf)

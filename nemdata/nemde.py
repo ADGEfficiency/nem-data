@@ -6,8 +6,6 @@ from nemdata.interfaces import scrape_url, unzip_file
 
 
 def form_nemde_url(year, month, day):
-    month = str(month).zfill(2)
-    day = str(day).zfill(2)
     return 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/NEMDE/{0}/NEMDE_{0}_{1}/NEMDE_Market_Data/NEMDE_Files/NemPriceSetter_{0}{1}{2}_xml.zip'.format(year, month, day)
 
 
@@ -15,6 +13,8 @@ def main(start, end, db=None):
     months = pd.date_range(start=start, end=end, freq='D')
 
     for year, month, day in zip(months.year, months.month, months.day):
+        month = str(month).zfill(2)
+        day = str(day).zfill(2)
         url = form_nemde_url(year, month, day)
 
         z_file = os.path.join(
@@ -31,7 +31,3 @@ def main(start, end, db=None):
             unzip_file(z_file, db.root)
 
         print(' ')
-
-
-if __name__ == '__main__':
-    main('2018-01', '2018-03', db=Files('nemde'))

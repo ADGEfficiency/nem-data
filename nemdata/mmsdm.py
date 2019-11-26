@@ -5,8 +5,16 @@ import pandas as pd
 from nemdata.interfaces import scrape_url, unzip_file
 
 
+reports = {
+    'trading-price': 'TRADINGPRICE',
+    'unit-scada': 'UNIT_SCADA',
+    'dispatch-price': 'DISPATCHPRICE',
+    'demand': 'DISPATCHREGIONSUM',
+    'interconnectors': 'DISPATCHINTERCONNECTORRES'
+}
+
+
 def form_report_url(year, month, report):
-    month = str(month).zfill(2)
     return 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/{0}/MMSDM_{0}_{1}/MMSDM_Historical_Data_SQLLoader/DATA/PUBLIC_DVD_{2}_{0}{1}010000.zip'.format(year, month, report)
 
 
@@ -18,10 +26,11 @@ def clean_report(input_file, output_file):
     raw.to_csv(output_file, index=False)
 
 
-def download_reports(report, start, end, db=None):
+def download_reports(report, start, end, db):
     months = pd.date_range(start=start, end=end, freq='M')
 
     for year, month in zip(months.year, months.month):
+        month = str(month).zfill(2)
         url = form_report_url(year, month, report)
 
         sub_dir = db.setup('{}-{}'.format(year, month))
@@ -39,16 +48,9 @@ def download_reports(report, start, end, db=None):
                 input_file=os.path.join(sub_dir, os.path.splitext(url.split('/')[-1])[0]+'.CSV'),
                 output_file=os.path.join(sub_dir, 'clean.csv'.format(report))
             )
+        print(' ')
 
 
 def main(report, start, end, db):
-    reports = {
-        'trading': 'TRADINGPRICE',
-        'unit-scada': 'UNIT_SCADA',
-        'dispatch': 'DISPATCHPRICE',
-        'demand': 'DISPATCHREGIONSUM',
-        'interconnectors': 'DISPATCHINTERCONNECTORRES'
-    }
     report = reports[report]
-
-    uc = download_reports(report, start, end, db)
+    download_reports(report, start, end, db)
