@@ -1,4 +1,4 @@
-# `nem-data`
+# nem-data
 
 A simple command line tool to access Australian National Energy Market (NEM) data provided by the Australian Energy Market Operator (AEMO).
 
@@ -15,11 +15,11 @@ python setup.py install
 To download the Downloads data into `$HOME/nem-data/interconnector`:
 
 ```bash
-nemdata --report interconnector --start 2018-01 --end 2018-03
+nem --reports interconnector --start 2018-01 --end 2018-03
 ```
 
 Downloads data into `$HOME/nem-data/nemde`:
 
 ```bash
-nemdata --report nemde
+nem --reports nemde
 ```

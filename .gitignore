@@ -4,6 +4,7 @@
 *.pytest_cache
 *.swp
 .hypothesis
+*xls
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
