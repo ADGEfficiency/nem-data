@@ -15,6 +15,7 @@ reports = {
 
 
 def form_report_url(year, month, report):
+    month = str(month).zfill(2)
     return 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/{0}/MMSDM_{0}_{1}/MMSDM_Historical_Data_SQLLoader/DATA/PUBLIC_DVD_{2}_{0}{1}010000.zip'.format(year, month, report)
 
 

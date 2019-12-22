@@ -6,6 +6,8 @@ from nemdata.interfaces import scrape_url, unzip_file
 
 
 def form_nemde_url(year, month, day):
+    month = str(month).zfill(2)
+    day = str(day).zfill(2)
     return 'http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/NEMDE/{0}/NEMDE_{0}_{1}/NEMDE_Market_Data/NEMDE_Files/NemPriceSetter_{0}{1}{2}_xml.zip'.format(year, month, day)
 
 

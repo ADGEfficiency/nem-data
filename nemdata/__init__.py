@@ -1,4 +1,4 @@
 import os
 
 
-home = os.path.join(os.environ['HOME'], 'nem-data')
+home = os.path.join(os.path.expanduser('~'), 'nem-data')
