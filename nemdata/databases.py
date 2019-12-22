@@ -2,11 +2,11 @@ import os
 
 
 class Files:
-    """ Uses the Unix filesystem """
+    """ Uses the filesystem """
     def __init__(self, name):
         self.name = name
         self.root = os.path.join(
-            os.environ['HOME'],
+            os.path.expanduser('~'),
             'nem-data',
             self.name
         )
