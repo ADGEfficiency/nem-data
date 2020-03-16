@@ -14,13 +14,16 @@ python setup.py install
 
 ## Usage
 
-To download the interconnector data into `$HOME/nem-data/interconnector`:
+All data is downloaded into into `$HOME/nem-data`.
+
+To download NEMDE data:
 
 ```bash
-nem --reports interconnector --start 2018-01 --end 2018-03
+nem --reports nemde --start 2018-01 --end 2018-03
 ```
 
-Currently support the NEMDE data, plus the following from MMSDM:
+Also support the following from MMSDM:
+
 ```python
 reports = {
     'trading-price': 'TRADINGPRICE',
@@ -31,6 +34,10 @@ reports = {
 }
 ```
 
-You can also
+For example, to download the interconnector data into `$HOME/nem-data/interconnector`:
 
-All data is downloadede into Downloads data into `$HOME/nem-data`.
+```bash
+nem --reports interconnectors --start 2018-01 --end 2018-03
+```
+
+

@@ -29,14 +29,12 @@ def clean_report(input_file, output_file):
 
 def download_reports(report, start, end, db):
     months = pd.date_range(start=start, end=end, freq='M')
-
     for year, month in zip(months.year, months.month):
         month = str(month).zfill(2)
         url = form_report_url(year, month, report)
 
         sub_dir = db.setup('{}-{}'.format(year, month))
         z_file = os.path.join(sub_dir, '{}.zip'.format(report))
-
         if os.path.isfile(z_file):
             print('not downloading {}'.format(url))
 
