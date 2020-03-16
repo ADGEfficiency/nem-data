@@ -34,10 +34,8 @@ reports = {
 }
 ```
 
-For example, to download the interconnector data into `$HOME/nem-data/interconnector`:
+For example, to download the interconnector data into `$HOME/nem-data/interconnectors`:
 
 ```bash
 nem --reports interconnectors --start 2018-01 --end 2018-03
 ```
-
-
