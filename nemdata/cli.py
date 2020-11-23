@@ -1,4 +1,5 @@
 import click
+import pandas as pd
 
 from nemdata.databases import Files
 from nemdata.use_cases import main as use_cases
@@ -20,5 +21,6 @@ def main(start, end, reports):
     click.echo('Hello from nem-data :)')
     click.echo(' ')
 
+    end = str(pd.Timestamp(end) + pd.Timedelta('31D'))
     for report in reports:
         use_cases(report, start, end, Files(report))

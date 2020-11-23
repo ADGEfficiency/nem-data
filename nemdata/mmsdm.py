@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from nemdata.interfaces import scrape_url, unzip_file
+from nemdata.interfaces import scrape_url, unzip_file, download_report
 
 
 reports = {
@@ -27,29 +27,19 @@ def clean_report(input_file, output_file):
     raw.to_csv(output_file, index=False)
 
 
-def download_reports(report, start, end, db):
+def main(report, start, end, db):
+    report = reports[report]
     months = pd.date_range(start=start, end=end, freq='M')
     for year, month in zip(months.year, months.month):
         month = str(month).zfill(2)
+
         url = form_report_url(year, month, report)
+        fldr = db.setup('{}-{}'.format(year, month))
+        z_file = os.path.join(fldr, f'{report}.zip')
+        download_report(fldr, z_file, url)
 
-        sub_dir = db.setup('{}-{}'.format(year, month))
-        z_file = os.path.join(sub_dir, '{}.zip'.format(report))
-        if os.path.isfile(z_file):
-            print('not downloading {}'.format(url))
-
-        else:
-            print('downloading {}'.format(url))
-            f = scrape_url(url, z_file)
-            unzip_file(z_file, sub_dir)
-
-            clean_report(
-                input_file=os.path.join(sub_dir, os.path.splitext(url.split('/')[-1])[0]+'.CSV'),
-                output_file=os.path.join(sub_dir, 'clean.csv'.format(report))
-            )
-        print(' ')
-
-
-def main(report, start, end, db):
-    report = reports[report]
-    download_reports(report, start, end, db)
+        name, date = fldr.split('/')[-2], fldr.split('/')[-1]
+        clean_report(
+            input_file=os.path.join(fldr, os.path.splitext(url.split('/')[-1])[0]+'.CSV'),
+            output_file=os.path.join(fldr, f'{name}_{date}_clean.csv')
+        )

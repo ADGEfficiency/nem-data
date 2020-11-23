@@ -9,7 +9,8 @@ It is designed to access historical data, for use by researchers & data scientis
 ## Setup
 
 ```bash
-python setup.py install
+$ pip install -r requirements.txt
+$ python setup.py install
 ```
 
 ## Usage
@@ -19,7 +20,7 @@ All data is downloaded into into `$HOME/nem-data`.
 To download NEMDE data:
 
 ```bash
-nem --reports nemde --start 2018-01 --end 2018-03
+$ nem --reports nemde --start 2018-01 --end 2018-03
 ```
 
 Also support the following from MMSDM:
@@ -37,5 +38,5 @@ reports = {
 For example, to download the interconnector data into `$HOME/nem-data/interconnectors`:
 
 ```bash
-nem --reports interconnectors --start 2018-01 --end 2018-03
+$ nem --reports interconnectors --start 2018-01 --end 2018-03
 ```

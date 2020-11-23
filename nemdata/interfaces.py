@@ -10,11 +10,15 @@ header = {'user-agent': 'Adam Green, adam.green@adgefficiency.com'}
 
 def scrape_url(url, output_file):
     """ Downloads a file from a url using requests """
-    with open(output_file, 'wb') as f:
-        response = requests.get(url, headers=header, stream=True)
-        assert response.status_code == 200
-        total_length = response.headers.get('content-length')
+    response = requests.get(url, headers=header, stream=True)
+    if response.status_code != 200:
+        print(f'not found, {url}')
+        return None
 
+    print(f'downloaded, {url}')
+    with open(output_file, 'wb') as f:
+
+        total_length = response.headers.get('content-length')
         if total_length is None:
             #  no content length header
             f.write(response.content)
@@ -31,7 +35,7 @@ def scrape_url(url, output_file):
                 )
                 sys.stdout.flush()
     print(' ')
-    return f
+    return True
 
 
 def unzip_file(file_path, output_path):
@@ -41,3 +45,18 @@ def unzip_file(file_path, output_path):
             my_zipfile.extractall(output_path)
     except zipfile.BadZipFile:
         print('{} not a ZipFile'.format(file_path))
+
+
+def download_report(fldr, z_file, url, cleaner=None):
+    if os.path.isfile(z_file):
+        print(f'already exists, {url}')
+        return None
+
+    if scrape_url(url, z_file):
+        unzip_file(z_file, fldr)
+
+        if cleaner:
+            cleaner(
+                input_file=os.path.join(fldr, name+'.CSV'),
+                output_file=os.path.join(fldr, name+'_clean.csv')
+            )
