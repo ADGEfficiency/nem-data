@@ -40,3 +40,9 @@ For example, to download the interconnector data into `$HOME/nem-data/interconne
 ```bash
 $ nem --reports interconnectors --start 2018-01 --end 2018-03
 ```
+
+Multiple reports can be downloaded at once:
+
+```bash
+$ nem -r interconnectors -r nemde --start 2018-01 --end 2018-03
+```

@@ -14,7 +14,7 @@ from nemdata.mmsdm import reports as mmsdm_reports
     '--end', '-e', default='2019-01', help='end date (incusive) (YYYY-MM)'
 )
 @click.option(
-    '--reports', '-r', multiple=True, default='nemde', help='nemde, '+', '.join(mmsdm_reports.keys())
+    '--reports', '-r', multiple=True, default=['nemde'], help='nemde, '+', '.join(mmsdm_reports.keys())
 )
 def main(start, end, reports):
     """nem-data is a tool to access NEM data"""
@@ -23,4 +23,5 @@ def main(start, end, reports):
 
     end = str(pd.Timestamp(end) + pd.Timedelta('31D'))
     for report in reports:
+        print(f'starting downloads for {report}')
         use_cases(report, start, end, Files(report))
