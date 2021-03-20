@@ -10,7 +10,7 @@ It is designed to access historical data, for use by researchers & data scientis
 
 ```bash
 $ pip install -r requirements.txt
-$ python setup.py install
+$ pip install -e .
 ```
 
 ## Usage
