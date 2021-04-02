@@ -2,9 +2,9 @@ import os
 
 import pandas as pd
 
-from nemdata.interfaces import scrape_url, unzip_file, download_report
+from nemdata.interfaces import scrape_url, unzip_file
 
-#  add in the frequency of the datetime index
+
 reports = {
     'trading-price': 'TRADINGPRICE',
     'unit-scada': 'UNIT_SCADA',
@@ -50,11 +50,13 @@ def main(report, start, end, db):
         url = form_report_url(year, month, report)
         fldr = db.setup('{}-{}'.format(year, month))
         z_file = os.path.join(fldr, f'{report}.zip')
-        download_report(fldr, z_file, url)
 
-        name, date = fldr.split('/')[-2], fldr.split('/')[-1]
-        clean_report(
-            input_file=os.path.join(fldr, os.path.splitext(url.split('/')[-1])[0]+'.CSV'),
-            output_file=os.path.join(fldr, f'clean.csv'),
-            freq=freq
-        )
+        if scrape_url(url, z_file):
+            unzip_file(z_file, fldr)
+
+            name, date = fldr.split('/')[-2], fldr.split('/')[-1]
+            clean_report(
+                input_file=os.path.join(fldr, os.path.splitext(url.split('/')[-1])[0]+'.CSV'),
+                output_file=os.path.join(fldr, f'clean.csv'),
+                freq=freq
+            )

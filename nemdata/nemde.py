@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from nemdata.interfaces import scrape_url, unzip_file, download_report
+from nemdata.interfaces import scrape_url, unzip_file
 
 
 def form_nemde_url(year, month, day):
@@ -21,4 +21,5 @@ def main(start, end, db):
         fldr = db.root
         z_file = os.path.join(db.root, '{}-{}-{}.zip'.format(year, month, day))
 
-        download_report(fldr, z_file, url)
+        if scrape_url(url, z_file):
+            unzip_file(z_file, fldr)

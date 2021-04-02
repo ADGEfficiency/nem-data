@@ -45,18 +45,3 @@ def unzip_file(file_path, output_path):
             my_zipfile.extractall(output_path)
     except zipfile.BadZipFile:
         print('{} not a ZipFile'.format(file_path))
-
-
-def download_report(fldr, z_file, url, cleaner=None):
-    if os.path.isfile(z_file):
-        print(f'already exists, {url}')
-        return None
-
-    if scrape_url(url, z_file):
-        unzip_file(z_file, fldr)
-
-        if cleaner:
-            cleaner(
-                input_file=os.path.join(fldr, name+'.CSV'),
-                output_file=os.path.join(fldr, name+'_clean.csv')
-            )

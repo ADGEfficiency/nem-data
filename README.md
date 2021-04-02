@@ -13,7 +13,7 @@ $ pip install -r requirements.txt
 $ pip install -e .
 ```
 
-## Usage
+## Use
 
 All data is downloaded into into `$HOME/nem-data`.
 
