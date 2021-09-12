@@ -1,3 +1,8 @@
+want to show both the url and the filepath after download
+---
+
+makefile for install / test
+
 download should be inclusive!
 assert 200 should fail differently
 

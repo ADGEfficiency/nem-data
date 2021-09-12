@@ -6,21 +6,24 @@ The tool aims to supply the most useful data only - see [A hackers guide to AEMO
 
 It is designed to access historical data, for use by researchers & data scientists.
 
+
 ## Setup
 
+Install as editable package:
+
 ```bash
-$ pip install -r requirements.txt
-$ pip install -e .
+$ make setup
 ```
+
 
 ## Use
 
-All data is downloaded into into `$HOME/nem-data`.
+Data is downloaded into into `$HOME/nem-data/data/`:
 
 To download NEMDE data:
 
 ```bash
-$ nem --reports nemde --start 2018-01 --end 2018-03
+$ nem --report nemde --start 2018-01 --end 2018-03
 ```
 
 Also support the following from MMSDM:

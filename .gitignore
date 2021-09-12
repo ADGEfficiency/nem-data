@@ -1,3 +1,5 @@
+nem-data/data/*
+
 # GENERIC
 # from https://github.com/github/gitignore/blob/master/Python.gitignore
 *.DS_Store

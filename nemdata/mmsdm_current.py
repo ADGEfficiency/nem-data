@@ -63,6 +63,7 @@ if __name__ == '__main__':
 
     """
     ran in console
+    clean = pd.read_csv('./public-prices/clean-csvs/public-prices.csv')
     mask = clean['DREGION'] == 'TREGION'
     subset = clean.loc[mask, :]
     subset.to_csv('./public-prices/tregion.csv')
