@@ -24,6 +24,8 @@ To download NEMDE data:
 
 ```bash
 $ nem --report nemde --start 2018-01 --end 2018-03
+
+$ nem --report trading-price --start 2018-01 --end 2018-03
 ```
 
 Also support the following from MMSDM:

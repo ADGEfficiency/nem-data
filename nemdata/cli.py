@@ -20,12 +20,15 @@ def cli(start, end, reports):
     """nem-data is a tool to access NEM data"""
     click.echo("Hello from nem-data :)\n")
     for report in reports:
-        print(f" starting downloads for {report}")
+        print(f"starting downloads for {report}")
         download(start, end, report)
 
 
 def download(start, end, report_id):
-    reports = {"nemde": download_nemde, "mmsdm": download_mmsdm}
+    reports = {
+        "nemde": download_nemde,
+        "trading-price": download_mmsdm,
+    }
     return reports[report_id](start, end, report_id)
 
 

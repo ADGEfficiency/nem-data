@@ -7,20 +7,6 @@ from nemdata.interfaces import scrape_url, unzip_file
 from nemdata.utils import download_zipfile_from_url, URL, unzip
 
 
-def main(start, end, db):
-    months = pd.date_range(start=start, end=end, freq="D")
-    for year, month, day in zip(months.year, months.month, months.day):
-        month = str(month).zfill(2)
-        day = str(day).zfill(2)
-
-        url = form_nemde_url(year, month, day)
-        fldr = db.root
-        z_file = os.path.join(db.root, "{}-{}-{}.zip".format(year, month, day))
-
-        if scrape_url(url, z_file):
-            unzip_file(z_file, fldr)
-
-
 def form_nemde_url(year, month, day):
     month = str(month).zfill(2)
     day = str(day).zfill(2)
@@ -55,6 +41,14 @@ def make_many_nemde_urls(start, end):
     return urls
 
 
+from pathlib import Path
+
+
+def find_xmls(path):
+    fis = [p for p in Path(path).iterdir() if p.suffix == ".xml"]
+    return [pd.read_xml(f) for f in fis]
+
+
 def download_nemde(start, end, report_id):
     assert report_id == "nemde"
     urls = make_many_nemde_urls(start, end)
@@ -62,7 +56,15 @@ def download_nemde(start, end, report_id):
     for url in urls:
         zf = download_zipfile_from_url(url)
         unzip(zf)
-        breakpoint()
+        xmls = find_xmls(url.home)
+
+        clean = pd.concat(xmls, axis=0)
+
+        #  get problems with a value of '5' without the cast to float
+        clean["BandNo"] = clean["BandNo"].astype(float)
+        print(f" saving csv and parquet to {url.home}/clean")
+        clean.to_csv(Path(url.home) / "clean.csv")
+        clean.to_parquet(Path(url.home) / "clean.parquet")
 
 
 # def main(start, end, db):

@@ -113,9 +113,11 @@ def download_mmsdm(start, end, report_id):
         data.loc[:, "timestamp"] = timestamp
 
         #  could check by assert difference == freq
-        path = zf.parent / "clean.csv"
-        print(f" saving to {path}")
-        data.to_csv(path, index=False)
+        path = Path(zf.parent)
+        print(f" saving csv and parquet to {path}/clean")
+        data.to_csv(path / "clean.csv")
+        data.to_parquet(path / "clean.parquet")
+
         output.append(data)
 
     return pd.concat(output, axis=0)
