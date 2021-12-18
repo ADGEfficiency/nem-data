@@ -25,7 +25,7 @@ reports = {
 }
 
 
-def make_report_url(year, month, report):
+def make_report_url(year, month, report, directory):
     #  zero pad the month
     month = str(month).zfill(2)
     prefix = f"https://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/{year}/MMSDM_{year}_{month}/MMSDM_Historical_Data_SQLLoader"
@@ -35,7 +35,7 @@ def make_report_url(year, month, report):
 
     return URL(
         # url=f"{prefix}/{directory}/PUBLIC_DVD_{report}_{year}{month}010000.zip",
-        url=f"{prefix}/DATA/PUBLIC_DVD_{report}_{year}{month}010000.zip",
+        url=f"{prefix}/{directory}/PUBLIC_DVD_{report}_{year}{month}010000.zip",
         year=year,
         month=month,
         report=report,

@@ -56,5 +56,5 @@ def test_form_nemde_url(year, month, day, expected):
     ],
 )
 def test_form_report_url(year, month, report, expected):
-    url = make_report_url(year, month, report)
+    url = make_report_url(year, month, report, "DATA")
     assert url.url == expected

@@ -3,7 +3,7 @@ setup:
 	pip install -e .
 
 test:
-	pytest tests
+	pytest tests -s --capture=no
 
 dataset: nemde trading-price
 
