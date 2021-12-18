@@ -1,18 +1,11 @@
+from pathlib import Path
 import os
 
 import pandas as pd
 
 from nemdata.config import HOME
 from nemdata.interfaces import scrape_url, unzip_file
-from nemdata.utils import download_zipfile_from_url, URL, unzip
-
-
-def form_nemde_url(year, month, day):
-    month = str(month).zfill(2)
-    day = str(day).zfill(2)
-    return "http://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/NEMDE/{0}/NEMDE_{0}_{1}/NEMDE_Market_Data/NEMDE_Files/NemPriceSetter_{0}{1}{2}_xml.zip".format(
-        year, month, day
-    )
+from nemdata.utils import download_zipfile_from_url, URL, unzip, add_interval_cols
 
 
 def make_nemde_url(year, month, day):
@@ -41,9 +34,6 @@ def make_many_nemde_urls(start, end):
     return urls
 
 
-from pathlib import Path
-
-
 def find_xmls(path):
     fis = [p for p in Path(path).iterdir() if p.suffix == ".xml"]
     return [pd.read_xml(f) for f in fis]
@@ -62,20 +52,12 @@ def download_nemde(start, end, report_id):
 
         #  get problems with a value of '5' without the cast to float
         clean["BandNo"] = clean["BandNo"].astype(float)
+
+        #  accounting for AEMO stamping intervals at the end
+        #  usually intervals are stamped at the start
+        clean["PeriodID"] = pd.to_datetime(clean["PeriodID"]).dt.tz_localize(None)
+        clean = add_interval_cols(clean, "PeriodID", "5T")
+
         print(f" saving csv and parquet to {url.home}/clean")
         clean.to_csv(Path(url.home) / "clean.csv")
         clean.to_parquet(Path(url.home) / "clean.parquet")
-
-
-# def main(start, end, db):
-#     months = pd.date_range(start=start, end=end, freq='D')
-#     for year, month, day in zip(months.year, months.month, months.day):
-#         month = str(month).zfill(2)
-#         day = str(day).zfill(2)
-
-#         url = form_nemde_url(year, month, day)
-#         fldr = db.root
-#         z_file = os.path.join(db.root, '{}-{}-{}.zip'.format(year, month, day))
-
-#         if scrape_url(url, z_file):
-#             unzip_file(z_file, fldr)

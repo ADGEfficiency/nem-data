@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 from nemdata.config import HOME
-from nemdata.utils import download_zipfile_from_url, URL, unzip
+from nemdata.utils import download_zipfile_from_url, URL, unzip, add_interval_cols
 
 
 reports = {
@@ -13,7 +13,6 @@ reports = {
         "dt-cols": ["LASTCHANGED", "DATETIME"],
         "interval-col": "DATETIME",
         "freq": "30T",
-        "timestamp": "LASTCHANGED",
     },
     "unit-scada": {"report": "DISPATCH_UNIT_SCADA", "directory": "DATA"},
     "trading-price": {
@@ -22,7 +21,6 @@ reports = {
         "dt-cols": ["SETTLEMENTDATE"],
         "interval-col": "SETTLEMENTDATE",
         "freq": "30T",
-        "timestamp": "SETTLEMENTDATE",
     },
 }
 
@@ -96,21 +94,16 @@ def download_mmsdm(start, end, report_id):
 
         #  unpacking the report dict - must be better way...
         report = reports[report_id]
-        interval = report["interval-col"]
-        timestamp = report["timestamp"]
+        timestamp_col = report["timestamp"]
 
         data = make_dt_cols(data, report["dt-cols"])
 
         #  accounting for AEMO stamping intervals at the end
         #  usually intervals are stamped at the start
-        interval = data[interval]
-        data.loc[:, "interval-end"] = interval
 
         freq = report["freq"]
-        data.loc[:, "interval-start"] = interval - pd.Timedelta(freq)
-
-        timestamp = data[timestamp]
-        data.loc[:, "timestamp"] = timestamp
+        interval_col = report["interval-col"]
+        data = add_interval_cols(data, interval_col, freq, timestamp_col)
 
         #  could check by assert difference == freq
         path = Path(zf.parent)
