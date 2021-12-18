@@ -25,7 +25,7 @@ reports = {
 }
 
 
-def make_report_url(year, month, report, directory):
+def make_report_url(year, month, report):
     #  zero pad the month
     month = str(month).zfill(2)
     prefix = f"https://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/{year}/MMSDM_{year}_{month}/MMSDM_Historical_Data_SQLLoader"
@@ -34,23 +34,14 @@ def make_report_url(year, month, report, directory):
     home.mkdir(exist_ok=True, parents=True)
 
     return URL(
-        url=f"{prefix}/{directory}/PUBLIC_DVD_{report}_{year}{month}010000.zip",
+        # url=f"{prefix}/{directory}/PUBLIC_DVD_{report}_{year}{month}010000.zip",
+        url=f"{prefix}/DATA/PUBLIC_DVD_{report}_{year}{month}010000.zip",
         year=year,
         month=month,
         report=report,
         csv=f"PUBLIC_DVD_{report}_{year}{month}010000.CSV",
         xml=None,
         home=home,
-    )
-
-
-def test_make_report_url():
-    expected = "https://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2021/MMSDM_2021_01/MMSDM_Historical_Data_SQLLoader/DATA/PUBLIC_DVD_DISPATCH_UNIT_SCADA_202101010000.zip"
-    assert make_report_url(2021, 1, "DISPATCH_UNIT_SCADA", "DATA").url == expected
-
-    expected = "https://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2021/MMSDM_2021_01/MMSDM_Historical_Data_SQLLoader/PREDISP_ALL_DATA/PUBLIC_DVD_PREDISPATCHPRICE_202101010000.zip"
-    assert (
-        make_report_url(2021, 1, "PREDISPATCHPRICE", "PREDISP_ALL_DATA").url == expected
     )
 
 
@@ -94,7 +85,7 @@ def download_mmsdm(start, end, report_id):
 
         #  unpacking the report dict - must be better way...
         report = reports[report_id]
-        timestamp_col = report["timestamp"]
+        timestamp_col = report["interval-col"]
 
         data = make_dt_cols(data, report["dt-cols"])
 
@@ -103,7 +94,7 @@ def download_mmsdm(start, end, report_id):
 
         freq = report["freq"]
         interval_col = report["interval-col"]
-        data = add_interval_cols(data, interval_col, freq, timestamp_col)
+        data = add_interval_cols(data, timestamp_col, freq)
 
         #  could check by assert difference == freq
         path = Path(zf.parent)
