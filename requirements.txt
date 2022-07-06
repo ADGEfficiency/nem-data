@@ -4,5 +4,5 @@ pandas==1.3.3
 numpy
 matplotlib
 pytest
-lxml==4.6.3
+lxml==4.9.1
 pyarrow==5.0.0
