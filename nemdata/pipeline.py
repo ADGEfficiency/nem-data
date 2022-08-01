@@ -54,28 +54,34 @@ def add_interval_columns(data, freq, timestamp_col):
 
 
 def process_raw_data(uow: m.UOW):
-    table = get_table(uow.table)
+    if uow.raw_fi.exists():
+        table = get_table(uow.table)
 
-    #  unzip the CSV from the raw zip downloaded earlier
-    unzip(uow.raw_zip)
+        #  unzip the CSV from the raw zip downloaded earlier
+        unzip(uow.raw_zip)
 
-    #  read csv - removing first & last rows
-    data = table.load_unzipped_data(uow.raw_fi)
+        #  read csv - removing first & last rows
+        data = table.load_unzipped_data(uow.raw_fi)
 
-    #  make datetime columns
-    data = convert_datetime_columns(data, table.dt_cols)
+        #  make datetime columns
+        data = convert_datetime_columns(data, table.dt_cols)
 
-    #  add_interval cols
-    data = add_interval_columns(data, table.freq, table.timestamp_col)
+        #  add_interval cols
+        data = add_interval_columns(data, table.freq, table.timestamp_col)
 
-    #  save clean.csv & clean.parquet
-    data.to_csv(uow.processed_fi.with_suffix(".csv"))
-    data.to_parquet(uow.processed_fi.with_suffix(".parquet"))
-    print(f" [green]SUCCESS PROCESSED[/] {uow.processed_fi}")
+        #  save clean.csv & clean.parquet
+        data.to_csv(uow.processed_fi.with_suffix(".csv"))
+        data.to_parquet(uow.processed_fi.with_suffix(".parquet"))
+        print(f" [green]SUCCESS PROCESSED[/] {uow.processed_fi}")
+        return "success"
+    else:
+        print(f" [red]FAIL PROCESSED[/] {uow.processed_fi}")
+        return "fail"
 
 
 def process_raw_datas(datas: List[m.UOW]):
     with multiprocessing.Pool(8) as pool:
-        pool.map(process_raw_data, datas)
+        results = pool.map(process_raw_data, datas)
 
-    print(f"[green]PROCESSED[/] [blue]{len(datas)} files[/]")
+    successes = len(list(filter(lambda x: x == "success", results)))
+    print(f"[green]PROCESSED[/] [blue]{successes}/{len(datas)} files[/]")

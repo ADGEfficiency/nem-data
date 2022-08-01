@@ -18,6 +18,7 @@ aiofiles = "^0.8.0"
 pyarrow = "^8.0.0"
 fastparquet = "^0.8.1"
 lxml = "^4.9.1"
+aiohttp = "^3.8.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"
