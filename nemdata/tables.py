@@ -1,6 +1,7 @@
 from typing import Union
 from nemdata import models as m
 from nemdata.database import homebase
+from pathlib import Path
 
 import pandas as pd
 from datetime import date
@@ -22,6 +23,12 @@ class Table:
     dt_cols = None
     timestamp_col = None
     freq = None
+
+    def create_uows(self):
+        raise NotImplementedError()
+
+    def load_unzipped_data(self):
+        raise NotImplementedError()
 
 
 class NEMDE(Table):
@@ -60,18 +67,16 @@ class NEMDE(Table):
             table=self.name,
         )
 
-    def create_urls(self, start: date, end: date) -> List["UOW"]:
+    def create_uows(self, start: date, end: date) -> List["UOW"]:
         days = pd.date_range(start=start, end=end, freq="D")
-        urls = []
+        ouws = []
         for year, month, day in zip(days.year, days.month, days.day):
-            urls.append(self.uow(year, month, day))
+            ouws.append(self.uow(year, month, day))
 
-        print(f"created [green]{len(urls)} urls[/] for [blue]{self.name}[/] table")
-        return urls
+        print(f"created [green]{len(ouws)} ouws[/] for [blue]{self.name}[/] table")
+        return ouws
 
     def load_unzipped_data(self, raw_fi):
-        from pathlib import Path
-
         path = raw_fi.parent
         fis = [p for p in Path(path).iterdir() if p.suffix == ".xml"]
         #  get problems with a value of '5' without the cast to float
@@ -109,15 +114,14 @@ class MMSDM(Table):
             table=self.name,
         )
 
-    def create_urls(self, start: date, end: date) -> List["UOW"]:
+    def create_uows(self, start: date, end: date) -> List["UOW"]:
         months = pd.date_range(start=start, end=end, freq="MS")
-        urls = []
+        uows = []
         for year, month in zip(months.year, months.month):
-            urls.append(self.uow(year, month))
-        return urls
+            uows.append(self.uow(year, month))
 
-        print(f"created [green]{len(urls)} urls[/] for [blue]{self.name}[/] table")
-        return urls
+        print(f"created [green]{len(uows)} uows[/] for [blue]{self.name}[/] table")
+        return uows
 
     def load_unzipped_data(self, raw_fi, skiprows=1, tail=-1):
         #  remove first row via skiprows
@@ -136,13 +140,19 @@ class TradingPrice(MMSDM):
 
 class PredispatchPrice(MMSDM):
     name = "predispatch-price"
-    table = "PREDISP_ALL_DATA"
+    table = "PREDISPATCHPRICE"
     dt_cols = ["LASTCHANGED", "DATETIME"]
     timestamp_col = "DATETIME"
     freq = "30T/5T"
 
+    directory = "MMSDM_Historical_Data_SQLLoader/PREDISP_ALL_DATA"
 
-tables = {"nemde": NEMDE(), "trading-price": TradingPrice()}
+
+tables = {
+    "nemde": NEMDE(),
+    "trading-price": TradingPrice(),
+    "predispatch-price": PredispatchPrice(),
+}
 
 
 def get_table(table: str) -> Union[NEMDE, MMSDM]:

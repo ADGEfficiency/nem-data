@@ -85,7 +85,7 @@ def cli(
     table = get_table(table)
 
     #  list of urls to download data from
-    urls = table.create_urls(start, end)
+    urls = table.create_uows(start, end)
 
     #  raw data stage
     #  saves to a `raw.zip` file (one per url)

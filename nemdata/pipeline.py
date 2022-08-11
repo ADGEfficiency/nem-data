@@ -9,6 +9,7 @@ import pandas as pd
 
 from nemdata import models as m
 from nemdata.tables import get_table
+from nemdata import cut_off
 
 
 def unzip(path: Path):
@@ -31,7 +32,6 @@ def convert_datetime_columns(data, dt_cols):
 
 def nem_settlement_change(dt):
     #  1/10/2021  12:05:00 AM
-    cut_off = datetime.datetime(2021, 10, 1, 0, 5, 0)
     if dt >= cut_off:
         return pd.Timedelta("5T")
     else:
