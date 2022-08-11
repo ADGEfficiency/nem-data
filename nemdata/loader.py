@@ -4,6 +4,7 @@ from rich import print
 import pandas as pd
 
 from nemdata import database, tables
+from nemdata import settlement_transition_date
 
 
 def resample_pre_settlement_transition(raw: pd.DataFrame) -> pd.DataFrame:
