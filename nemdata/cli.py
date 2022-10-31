@@ -28,6 +28,7 @@ def download(start, end, report_id):
     reports = {
         "nemde": download_nemde,
         "trading-price": download_mmsdm,
+        "unit-scada": download_mmsdm,
     }
     return reports[report_id](start, end, report_id)
 
