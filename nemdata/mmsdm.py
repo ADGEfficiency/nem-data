@@ -14,7 +14,13 @@ reports = {
         "interval-col": "DATETIME",
         "freq": "30T",
     },
-    "unit-scada": {"report": "DISPATCH_UNIT_SCADA", "directory": "DATA"},
+    "unit-scada": {
+        "report": "DISPATCH_UNIT_SCADA",
+        "directory": "DATA",
+        "interval-col": "SETTLEMENTDATE",
+        "dt-cols": ["SETTLEMENTDATE"],
+        "freq": "5T"
+    },
     "trading-price": {
         "report": "TRADINGPRICE",
         "directory": "DATA",
@@ -25,16 +31,15 @@ reports = {
 }
 
 
-def make_report_url(year, month, report, directory):
+def make_report_url(year, month, report, directory, report_id):
     #  zero pad the month
     month = str(month).zfill(2)
     prefix = f"https://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/{year}/MMSDM_{year}_{month}/MMSDM_Historical_Data_SQLLoader"
 
-    home = HOME / report / f"{year}-{month}"
+    home = HOME / report_id / f"{year}-{month}"
     home.mkdir(exist_ok=True, parents=True)
 
     return URL(
-        # url=f"{prefix}/{directory}/PUBLIC_DVD_{report}_{year}{month}010000.zip",
         url=f"{prefix}/{directory}/PUBLIC_DVD_{report}_{year}{month}010000.zip",
         year=year,
         month=month,
@@ -51,7 +56,7 @@ def make_many_report_urls(start, end, report_id):
 
     urls = []
     for year, month in zip(months.year, months.month):
-        urls.append(make_report_url(year, month, report["report"], report["directory"]))
+        urls.append(make_report_url(year, month, report["report"], report["directory"], report_id))
     return urls
 
 
