@@ -2,14 +2,11 @@ import os
 
 
 class Files:
-    """ Uses the filesystem """
+    """Uses the filesystem"""
+
     def __init__(self, name):
         self.name = name
-        self.root = os.path.join(
-            os.path.expanduser('~'),
-            'nem-data',
-            self.name
-        )
+        self.root = os.path.join(os.path.expanduser("~"), "nem-data", self.name)
         os.makedirs(self.root, exist_ok=True)
 
     def setup(self, name):

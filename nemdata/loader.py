@@ -14,17 +14,24 @@ def concat_trading_price(report_id, pkg):
     datas = []
     for fi in fis:
         data = pd.read_parquet(fi)
-        for region in data['REGIONID'].unique():
-            raw = data[data['REGIONID'] == region]
-            raw = raw.set_index('interval-start').sort_index()
+        for region in data["REGIONID"].unique():
+            raw = data[data["REGIONID"] == region]
+            raw = raw.set_index("interval-start").sort_index()
+
+            if pd.infer_freq(raw.index) == '30T':
+                #  need to add on a period to get what we want after resample
+                raw.loc[
+                    raw.index[-1] + pd.Timedelta('25T'), :
+                ] = raw.iloc[-1, :]
             subset = raw.resample("5T").ffill()
+            subset['interval-end'] = subset.index + pd.Timedelta('5T')
             datas.append(subset)
 
     pkg[report_id.name] = pd.concat(datas).reset_index()
     return pkg
 
 
-def loader(desired_reports = None):
+def loader(desired_reports=None):
     pkg = {}
     report_ids = [p for p in HOME.iterdir() if p.is_dir()]
     print(f"found {report_ids}")
@@ -35,10 +42,9 @@ def loader(desired_reports = None):
 
     #  default to loading everything
     for report_id in report_ids:
-        if report_id.name == 'trading-price':
+        if report_id.name == "trading-price":
             pkg = concat_trading_price(report_id, pkg)
         else:
             pkg = concat(report_id, pkg)
 
     return pkg
-
