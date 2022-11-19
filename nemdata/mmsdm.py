@@ -19,7 +19,7 @@ reports = {
         "directory": "DATA",
         "interval-col": "SETTLEMENTDATE",
         "dt-cols": ["SETTLEMENTDATE"],
-        "freq": "5T"
+        "freq": "5T",
     },
     "trading-price": {
         "report": "TRADINGPRICE",
@@ -56,7 +56,11 @@ def make_many_report_urls(start, end, report_id):
 
     urls = []
     for year, month in zip(months.year, months.month):
-        urls.append(make_report_url(year, month, report["report"], report["directory"], report_id))
+        urls.append(
+            make_report_url(
+                year, month, report["report"], report["directory"], report_id
+            )
+        )
     return urls
 
 

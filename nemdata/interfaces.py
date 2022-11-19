@@ -5,20 +5,20 @@ import bs4
 import requests
 
 
-header = {'user-agent': 'Adam Green, adam.green@adgefficiency.com'}
+header = {"user-agent": "Adam Green, adam.green@adgefficiency.com"}
 
 
 def scrape_url(url, output_file):
-    """ Downloads a file from a url using requests """
+    """Downloads a file from a url using requests"""
     response = requests.get(url, headers=header, stream=True)
     if response.status_code != 200:
-        print(f'not found, {url}')
+        print(f"not found, {url}")
         return None
 
-    print(f'downloaded, {url}')
-    with open(output_file, 'wb') as f:
+    print(f"downloaded, {url}")
+    with open(output_file, "wb") as f:
 
-        total_length = response.headers.get('content-length')
+        total_length = response.headers.get("content-length")
         if total_length is None:
             #  no content length header
             f.write(response.content)
@@ -31,17 +31,17 @@ def scrape_url(url, output_file):
                 f.write(data)
                 done = int(50 * dl / total_length)
                 sys.stdout.write(
-                    '\r {}% [{}{}]'.format(2*done, '+'*done, ' '*(50-done))
+                    "\r {}% [{}{}]".format(2 * done, "+" * done, " " * (50 - done))
                 )
                 sys.stdout.flush()
-    print(' ')
+    print(" ")
     return True
 
 
 def unzip_file(file_path, output_path):
-    """ unzips a file from one path to an output path using stdlib """
+    """unzips a file from one path to an output path using stdlib"""
     try:
-        with zipfile.ZipFile(file_path, 'r') as my_zipfile:
+        with zipfile.ZipFile(file_path, "r") as my_zipfile:
             my_zipfile.extractall(output_path)
     except zipfile.BadZipFile:
-        print('{} not a ZipFile'.format(file_path))
+        print("{} not a ZipFile".format(file_path))

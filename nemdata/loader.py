@@ -14,9 +14,9 @@ def concat_trading_price(report_id, pkg):
     datas = []
     for fi in fis:
         data = pd.read_parquet(fi)
-        for region in data['REGIONID'].unique():
-            raw = data[data['REGIONID'] == region]
-            raw = raw.set_index('interval-start').sort_index()
+        for region in data["REGIONID"].unique():
+            raw = data[data["REGIONID"] == region]
+            raw = raw.set_index("interval-start").sort_index()
             subset = raw.resample("5T").ffill()
             datas.append(subset)
 
@@ -24,7 +24,7 @@ def concat_trading_price(report_id, pkg):
     return pkg
 
 
-def loader(desired_reports = None):
+def loader(desired_reports=None):
     pkg = {}
     report_ids = [p for p in HOME.iterdir() if p.is_dir()]
     print(f"found {report_ids}")
@@ -35,10 +35,9 @@ def loader(desired_reports = None):
 
     #  default to loading everything
     for report_id in report_ids:
-        if report_id.name == 'trading-price':
+        if report_id.name == "trading-price":
             pkg = concat_trading_price(report_id, pkg)
         else:
             pkg = concat(report_id, pkg)
 
     return pkg
-
