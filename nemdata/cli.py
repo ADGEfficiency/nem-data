@@ -1,8 +1,7 @@
 import click
 import pandas as pd
 
-from nemdata.mmsdm import download_mmsdm
-from nemdata.mmsdm import reports as mmsdm_reports
+from nemdata import mmsdm
 from nemdata.nemde import download_nemde
 
 
@@ -14,7 +13,7 @@ from nemdata.nemde import download_nemde
     "-r",
     multiple=True,
     default=["nemde"],
-    help="nemde, " + ", ".join(mmsdm_reports.keys()),
+    help="nemde, " + ", ".join(mmsdm.reports.keys()),
 )
 def cli(start, end, reports):
     """nem-data is a tool to access NEM data"""
@@ -27,8 +26,8 @@ def cli(start, end, reports):
 def download(start, end, report_id):
     reports = {
         "nemde": download_nemde,
-        "trading-price": download_mmsdm,
-        "unit-scada": download_mmsdm,
+        "trading-price": mmsdm.download_mmsdm,
+        "unit-scada": mmsdm.download_mmsdm,
     }
     return reports[report_id](start, end, report_id)
 

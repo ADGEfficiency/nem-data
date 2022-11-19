@@ -82,7 +82,11 @@ def make_dt_cols(data, dt_cols):
     return data
 
 
-def download_mmsdm(start, end, report_id):
+def download_mmsdm(
+    start,
+    end,
+    report_id
+):
     urls = make_many_report_urls(start, end, report_id)
 
     output = []

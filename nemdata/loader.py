@@ -17,7 +17,14 @@ def concat_trading_price(report_id, pkg):
         for region in data["REGIONID"].unique():
             raw = data[data["REGIONID"] == region]
             raw = raw.set_index("interval-start").sort_index()
+
+            if pd.infer_freq(raw.index) == '30T':
+                #  need to add on a period to get what we want after resample
+                raw.loc[
+                    raw.index[-1] + pd.Timedelta('25T'), :
+                ] = raw.iloc[-1, :]
             subset = raw.resample("5T").ffill()
+            subset['interval-end'] = subset.index + pd.Timedelta('5T')
             datas.append(subset)
 
     pkg[report_id.name] = pd.concat(datas).reset_index()
