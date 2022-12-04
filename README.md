@@ -27,7 +27,7 @@ Usage: nemdata [OPTIONS]
 Options:
   -s, --start TEXT    start date (YYYY-MM)
   -e, --end TEXT      end date (incusive) (YYYY-MM)
-  -r, --report TEXT  nemde, predispatch, unit-scada, trading-price
+  -r, --report TEXT   nemde, predispatch, unit-scada, trading-price
   --help              Show this message and exit.
 ```
 
