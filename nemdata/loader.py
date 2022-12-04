@@ -40,7 +40,7 @@ def loader(base_dir=DEFAULT_BASE_DIR, desired_reports=None):
     if desired_reports is not None:
         report_ids = [p for p in report_ids if p.name in desired_reports]
 
-    print("[bold green]Loader[/]: {[r.name for r in report_ids]}")
+    print(f"[bold green]Loader[/]: {[r.name for r in report_ids]}")
 
     for report_id in report_ids:
         if report_id.name == "trading-price":
