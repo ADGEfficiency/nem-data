@@ -88,10 +88,10 @@ def download_mmsdm(start, end, report_id, base_dir):
     for url in urls:
         clean_fi = url.home / "clean.parquet"
         if clean_fi.exists():
-            print(f" {clean_fi} exists - not redownloading")
+            print(f" [blue]exists[/] {clean_fi.parts[-5:]}")
             data = pd.read_parquet(clean_fi)
         else:
-            print(f" {clean_fi} does not exist - downloading")
+            print(f" [blue]missing[/] {clean_fi.parts[-5:]}")
             zf = download_zipfile_from_url(url)
             unzip(zf)
 
@@ -108,9 +108,11 @@ def download_mmsdm(start, end, report_id, base_dir):
             data = add_interval_cols(data, timestamp_col, report["freq"])
 
             #  could check by assert difference == freq
-            print(f" saving csv and parquet to {url.home}/clean.{{csv,parquet}}")
+            print(f" [green]saving [/] {url.home.parts[-4:]}")
             data.to_csv(clean_fi.with_suffix(".csv"))
             data.to_parquet(clean_fi.with_suffix(".parquet"))
+
+        print("\n")
 
         output.append(data)
 

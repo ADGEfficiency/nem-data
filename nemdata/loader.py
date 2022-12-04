@@ -1,4 +1,5 @@
 import pandas as pd
+from rich import print
 
 from nemdata.config import DEFAULT_BASE_DIR
 
@@ -30,16 +31,17 @@ def concat_trading_price(report_id, pkg):
     return pkg
 
 
-def loader(desired_reports=None):
+def loader(base_dir=DEFAULT_BASE_DIR, desired_reports=None):
     pkg = {}
-    report_ids = [p for p in DEFAULT_BASE_DIR.iterdir() if p.is_dir()]
-    print(f"found {report_ids}")
-
-    if desired_reports is not None:
-        report_ids = [p for p in report_ids if p.name in desired_reports]
-    print(f"loading {report_ids}")
+    report_ids = [p for p in base_dir.iterdir() if p.is_dir()]
+    print(f" found {[r.name for r in report_ids]}")
 
     #  default to loading everything
+    if desired_reports is not None:
+        report_ids = [p for p in report_ids if p.name in desired_reports]
+
+    print("[bold green]Loader[/]: {[r.name for r in report_ids]}")
+
     for report_id in report_ids:
         if report_id.name == "trading-price":
             pkg = concat_trading_price(report_id, pkg)

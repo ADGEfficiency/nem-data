@@ -1,5 +1,5 @@
 import click
-import pandas as pd
+from rich import print
 
 from nemdata import mmsdm
 from nemdata.config import DEFAULT_BASE_DIR
@@ -16,12 +16,12 @@ from nemdata.nemde import download_nemde
 )
 def cli(start, end, report):
     """nem-data is a tool to access NEM data"""
-    click.echo("Hello from nem-data :)\n")
-    print(f"Starting downloads for {report}")
+    print(":wave: from nemdata\n")
     download(start, end, report)
 
 
 def download(start, end, report_id, base_dir=DEFAULT_BASE_DIR):
+    print(f"[bold green]Downloader[/]: {report_id}")
     reports = {
         "nemde": download_nemde,
         "trading-price": mmsdm.download_mmsdm,

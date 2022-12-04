@@ -1,8 +1,8 @@
 # nem-data
 
-A simple Python command line tool to access Australian National Energy Market (NEM) data provided by the Australian Energy Market Operator (AEMO).
+A simple & opinionated Python command line tool to access Australian National Energy Market (NEM) data provided by the Australian Energy Market Operator (AEMO).
 
-It is designed to access historical data, for use by researchers & data scientists.  This tool supports my personal research work.  It is not designed for production use - see [NEMOSIS](https://github.com/UNSW-CEEM/NEMOSIS) for a production grade package.
+It is designed for use by researchers & data scientists - this tool supports my personal research work.  It is not designed for production use - see [NEMOSIS](https://github.com/UNSW-CEEM/NEMOSIS) for a production grade package.
 
 See [A hackers guide to AEMO & NEM data](https://adgefficiency.com/hackers-aemo/) for more on context the data provided by AEMO.
 
@@ -31,7 +31,6 @@ Options:
   --help              Show this message and exit.
 ```
 
-Data is downloaded into into `$HOME/nem-data/data/`:
 
 To download NEMDE data:
 
@@ -55,3 +54,33 @@ reports = {
 }
 ```
 
+
+## Output Data
+
+Data is downloaded into into `$HOME/nem-data/data/`:
+
+```shell-session
+$ nemdata -r trading-price -s 2020-01 -e 2020-02
+$ tree ~/nem-data
+/Users/adam/nem-data
+└── data
+    └── trading-price
+        ├── 2020-01
+        │   ├── PUBLIC_DVD_TRADINGPRICE_202001010000.CSV
+        │   ├── clean.csv
+        │   ├── clean.parquet
+        │   └── raw.zip
+        └── 2020-02
+            ├── PUBLIC_DVD_TRADINGPRICE_202002010000.CSV
+            ├── clean.csv
+            ├── clean.parquet
+            └── raw.zip
+
+4 directories, 8 files
+```
+
+A few things happen during data processing:
+
+- the top & bottom rows of the raw CSV are removed,
+- `interval-start` and `interval-end` columns are added,
+- for `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).
