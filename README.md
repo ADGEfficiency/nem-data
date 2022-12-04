@@ -23,9 +23,9 @@ Data is downloaded into into `$HOME/nem-data/data/`:
 To download NEMDE data:
 
 ```bash
-$ nem --report nemde --start 2018-01 --end 2018-03
+$ nemdata --report nemde --start 2018-01 --end 2018-03
 
-$ nem --report trading-price --start 2018-01 --end 2018-03
+$ nemdata --report trading-price --start 2018-01 --end 2018-03
 ```
 
 Also support the following from MMSDM:
@@ -43,11 +43,11 @@ reports = {
 For example, to download the interconnector data into `$HOME/nem-data/interconnectors`:
 
 ```bash
-$ nem --reports interconnectors --start 2018-01 --end 2018-03
+$ nemdata --reports interconnectors --start 2018-01 --end 2018-03
 ```
 
 Multiple reports can be downloaded at once:
 
 ```bash
-$ nem -r interconnectors -r nemde --start 2018-01 --end 2018-03
+$ nemdata -r interconnectors -r nemde --start 2018-01 --end 2018-03
 ```

@@ -1,18 +1,17 @@
-from pathlib import Path
 import os
+from pathlib import Path
 
 import pandas as pd
 
-from nemdata.config import HOME
 from nemdata.interfaces import scrape_url, unzip_file
-from nemdata.utils import download_zipfile_from_url, URL, unzip, add_interval_cols
+from nemdata.utils import URL, add_interval_cols, download_zipfile_from_url, unzip
 
 
-def make_nemde_url(year, month, day):
+def make_nemde_url(year, month, day, base_dir):
     month = str(month).zfill(2)
     day = str(day).zfill(2)
 
-    home = HOME / "nemde" / f"{year}-{month}-{day}"
+    home = base_dir / "nemde" / f"{year}-{month}-{day}"
     home.mkdir(exist_ok=True, parents=True)
 
     return URL(
@@ -26,11 +25,11 @@ def make_nemde_url(year, month, day):
     )
 
 
-def make_many_nemde_urls(start, end):
+def make_many_nemde_urls(start, end, base_dir):
     urls = []
     months = pd.date_range(start=start, end=end, freq="D")
     for year, month, day in zip(months.year, months.month, months.day):
-        urls.append(make_nemde_url(year, month, day))
+        urls.append(make_nemde_url(year, month, day, base_dir))
     return urls
 
 
@@ -39,9 +38,9 @@ def find_xmls(path):
     return [pd.read_xml(f) for f in fis]
 
 
-def download_nemde(start, end, report_id):
+def download_nemde(start, end, report_id, base_dir):
     assert report_id == "nemde"
-    urls = make_many_nemde_urls(start, end)
+    urls = make_many_nemde_urls(start, end, base_dir)
     output = []
     for url in urls:
         zf = download_zipfile_from_url(url)

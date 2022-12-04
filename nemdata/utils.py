@@ -1,7 +1,7 @@
 from collections import namedtuple
-import requests
-import pandas as pd
 
+import pandas as pd
+import requests
 
 URL = namedtuple("url", "url, year, month, report, csv, xml, home")
 
