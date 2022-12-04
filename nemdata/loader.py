@@ -1,5 +1,7 @@
 import pandas as pd
-from nemdata.config import HOME
+from rich import print
+
+from nemdata.config import DEFAULT_BASE_DIR
 
 
 def concat(report_id, pkg):
@@ -18,29 +20,28 @@ def concat_trading_price(report_id, pkg):
             raw = data[data["REGIONID"] == region]
             raw = raw.set_index("interval-start").sort_index()
 
-            if pd.infer_freq(raw.index) == '30T':
+            if pd.infer_freq(raw.index) == "30T":
                 #  need to add on a period to get what we want after resample
-                raw.loc[
-                    raw.index[-1] + pd.Timedelta('25T'), :
-                ] = raw.iloc[-1, :]
+                raw.loc[raw.index[-1] + pd.Timedelta("25T"), :] = raw.iloc[-1, :]
             subset = raw.resample("5T").ffill()
-            subset['interval-end'] = subset.index + pd.Timedelta('5T')
+            subset["interval-end"] = subset.index + pd.Timedelta("5T")
             datas.append(subset)
 
     pkg[report_id.name] = pd.concat(datas).reset_index()
     return pkg
 
 
-def loader(desired_reports=None):
+def loader(base_dir=DEFAULT_BASE_DIR, desired_reports=None):
     pkg = {}
-    report_ids = [p for p in HOME.iterdir() if p.is_dir()]
-    print(f"found {report_ids}")
-
-    if desired_reports is not None:
-        report_ids = [p for p in report_ids if p.name in desired_reports]
-    print(f"loading {report_ids}")
+    report_ids = [p for p in base_dir.iterdir() if p.is_dir()]
+    print(f" found {[r.name for r in report_ids]}")
 
     #  default to loading everything
+    if desired_reports is not None:
+        report_ids = [p for p in report_ids if p.name in desired_reports]
+
+    print(f"[bold green]Loader[/]: {[r.name for r in report_ids]}")
+
     for report_id in report_ids:
         if report_id.name == "trading-price":
             pkg = concat_trading_price(report_id, pkg)

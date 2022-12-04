@@ -1,10 +1,9 @@
-from setuptools import setup, find_packages
-
+from setuptools import find_packages, setup
 
 setup(
     name="nemdata",
-    version="0.0.3",
-    description="downloading useful data for the Australian NEM",
+    version="0.0.4",
+    description="CLI for downloading AEMO Australian electricity grid data for the NEM.",
     author="Adam Green",
     author_email="adam.green@adgefficiency.com",
     url="http://www.adgefficiency.com/",
@@ -14,6 +13,6 @@ setup(
     install_requires=["Click"],
     entry_points="""
             [console_scripts]
-            nem=nemdata.cli:cli
+            nemdata=nemdata.cli:cli
         """,
 )

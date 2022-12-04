@@ -1,4 +1,3 @@
 from pathlib import Path
 
-
-HOME = Path.home() / "nem-data" / "data"
+DEFAULT_BASE_DIR = Path.home() / "nem-data" / "data"

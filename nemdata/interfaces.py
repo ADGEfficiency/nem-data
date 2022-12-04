@@ -1,9 +1,7 @@
-import os
-import zipfile
 import sys
-import bs4
-import requests
+import zipfile
 
+import requests
 
 header = {"user-agent": "Adam Green, adam.green@adgefficiency.com"}
 

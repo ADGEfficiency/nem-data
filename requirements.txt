@@ -6,3 +6,4 @@ matplotlib
 pytest
 lxml
 pyarrow
+rich

@@ -1,14 +1,12 @@
-setup:
-	pip install -r requirements.txt
-	pip install -e .
+.PHONY: all clean setup test test-ci
 
-test:
+all: test
+
+setup:
+	pip install -r requirements.txt -q
+	pip install -e . -q
+
+test: setup
 	pytest tests -s --capture=no
 
-dataset: nemde trading-price
-
-nemde:
-	nem -r nemde --start 2014-01-01 --end 2020-12-31
-
-trading-price:
-	nem -r trading-price --start 2014-01-01 --end 2020-12-31
+test-ci: test

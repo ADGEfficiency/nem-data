@@ -1,14 +1,15 @@
 from collections import namedtuple
-import requests
-import pandas as pd
 
+import pandas as pd
+import requests
+from rich import print
 
 URL = namedtuple("url", "url, year, month, report, csv, xml, home")
 
 
 def download_zipfile_from_url(url, chunk_size=128):
     path = url.home / "raw.zip"
-    print(f" downloading zip to {path}")
+    print(f" [green]downloading[/] {path.parts[-5:]}")
     r = requests.get(url.url, stream=True)
     with open(path, "wb") as fd:
         for chunk in r.iter_content(chunk_size=chunk_size):

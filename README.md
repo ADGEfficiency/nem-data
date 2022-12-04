@@ -1,10 +1,10 @@
 # nem-data
 
-A simple Python command line tool to access Australian National Energy Market (NEM) data provided by the Australian Energy Market Operator (AEMO).
+A simple & opinionated Python command line tool to access Australian National Energy Market (NEM) data provided by the Australian Energy Market Operator (AEMO).
 
-The tool aims to supply the most useful data only - see [A hackers guide to AEMO & NEM data](https://adgefficiency.com/hackers-aemo/) for more on the data provided by AEMO about the NEM.
+It is designed for use by researchers & data scientists - this tool supports my personal research work.  It is not designed for production use - see [NEMOSIS](https://github.com/UNSW-CEEM/NEMOSIS) for a production grade package.
 
-It is designed to access historical data, for use by researchers & data scientists.
+See [A hackers guide to AEMO & NEM data](https://adgefficiency.com/hackers-aemo/) for more on context the data provided by AEMO.
 
 
 ## Setup
@@ -18,36 +18,69 @@ $ make setup
 
 ## Use
 
-Data is downloaded into into `$HOME/nem-data/data/`:
+```shell-session
+$ nemdata --help
+Usage: nemdata [OPTIONS]
+
+  nem-data is a tool to access NEM data
+
+Options:
+  -s, --start TEXT    start date (YYYY-MM)
+  -e, --end TEXT      end date (incusive) (YYYY-MM)
+  -r, --report TEXT  nemde, predispatch, unit-scada, trading-price
+  --help              Show this message and exit.
+```
+
 
 To download NEMDE data:
 
 ```bash
-$ nem --report nemde --start 2018-01 --end 2018-03
-
-$ nem --report trading-price --start 2018-01 --end 2018-03
+$ nemdata -r nemde --start 2018-01 --end 2018-03
 ```
 
-Also support the following from MMSDM:
+To download trading price data:
+
+```python
+$ nemdata -r trading-price -s 2018-01 -e 2018-03
+```
+
+Support the following datasets from MMSDM:
 
 ```python
 reports = {
     'trading-price': 'TRADINGPRICE',
     'unit-scada': 'UNIT_SCADA',
-    'dispatch-price': 'DISPATCHPRICE',
-    'demand': 'DISPATCHREGIONSUM',
-    'interconnectors': 'DISPATCHINTERCONNECTORRES'
+    'predispatch': "PREDISPATCHPRICE"
 }
 ```
 
-For example, to download the interconnector data into `$HOME/nem-data/interconnectors`:
 
-```bash
-$ nem --reports interconnectors --start 2018-01 --end 2018-03
+## Output Data
+
+Data is downloaded into into `$HOME/nem-data/data/`:
+
+```shell-session
+$ nemdata -r trading-price -s 2020-01 -e 2020-02
+$ tree ~/nem-data
+/Users/adam/nem-data
+└── data
+    └── trading-price
+        ├── 2020-01
+        │   ├── PUBLIC_DVD_TRADINGPRICE_202001010000.CSV
+        │   ├── clean.csv
+        │   ├── clean.parquet
+        │   └── raw.zip
+        └── 2020-02
+            ├── PUBLIC_DVD_TRADINGPRICE_202002010000.CSV
+            ├── clean.csv
+            ├── clean.parquet
+            └── raw.zip
+
+4 directories, 8 files
 ```
 
-Multiple reports can be downloaded at once:
+A few things happen during data processing:
 
-```bash
-$ nem -r interconnectors -r nemde --start 2018-01 --end 2018-03
-```
+- the top & bottom rows of the raw CSV are removed,
+- `interval-start` and `interval-end` columns are added,
+- for `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).

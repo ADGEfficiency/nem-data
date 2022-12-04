@@ -1,5 +1,6 @@
 import pytest
 
+from nemdata.config import DEFAULT_BASE_DIR
 from nemdata.mmsdm import make_report_url
 from nemdata.nemde import make_nemde_url
 
@@ -28,33 +29,38 @@ from nemdata.nemde import make_nemde_url
     ],
 )
 def test_form_nemde_url(year, month, day, expected):
-    url = make_nemde_url(year, month, day)
+    url = make_nemde_url(year, month, day, base_dir=DEFAULT_BASE_DIR)
     assert url.url == expected
 
 
 @pytest.mark.parametrize(
-    "year, month, report, expected",
+    "year, month, report, report_id, expected",
     [
         (
             2019,
             1,
             "DISPATCHINTERCONNECTORRES",
+            "interconnectors",
             "https://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2019/MMSDM_2019_01/MMSDM_Historical_Data_SQLLoader/DATA/PUBLIC_DVD_DISPATCHINTERCONNECTORRES_201901010000.zip",
         ),
         (
             2019,
             2,
             "FAKEREPORT",
+            "fake",
             "https://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2019/MMSDM_2019_02/MMSDM_Historical_Data_SQLLoader/DATA/PUBLIC_DVD_FAKEREPORT_201902010000.zip",
         ),
         (
             2010,
             12,
             "DISPATCHINTERCONNECTORRES",
+            "interconnectors",
             "https://www.nemweb.com.au/Data_Archive/Wholesale_Electricity/MMSDM/2010/MMSDM_2010_12/MMSDM_Historical_Data_SQLLoader/DATA/PUBLIC_DVD_DISPATCHINTERCONNECTORRES_201012010000.zip",
         ),
     ],
 )
-def test_form_report_url(year, month, report, expected):
-    url = make_report_url(year, month, report, "DATA")
+def test_form_report_url(year, month, report, report_id, expected):
+    url = make_report_url(
+        year, month, report, "DATA", report_id, base_dir=DEFAULT_BASE_DIR
+    )
     assert url.url == expected
