@@ -1,6 +1,7 @@
+import pandas as pd
+
 from nemdata.cli import download
 from nemdata.loader import loader
-import pandas as pd
 
 
 def test_loader_unit_scada():
