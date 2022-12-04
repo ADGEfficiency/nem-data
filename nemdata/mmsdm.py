@@ -1,10 +1,10 @@
 from pathlib import Path
 
 import pandas as pd
+from rich import print
 
 from nemdata.config import HOME
-from nemdata.utils import download_zipfile_from_url, URL, unzip, add_interval_cols
-
+from nemdata.utils import URL, add_interval_cols, download_zipfile_from_url, unzip
 
 reports = {
     "predispatch": {
@@ -82,38 +82,36 @@ def make_dt_cols(data, dt_cols):
     return data
 
 
-def download_mmsdm(
-    start,
-    end,
-    report_id
-):
+def download_mmsdm(start, end, report_id):
     urls = make_many_report_urls(start, end, report_id)
 
     output = []
     for url in urls:
-        zf = download_zipfile_from_url(url)
-        unzip(zf)
+        clean_fi = url.home / "clean.parquet"
+        if clean_fi.exists():
+            print(f" {clean_fi} exists - not redownloading")
+            data = pd.read_parquet(clean_fi)
+        else:
+            print(f" {clean_fi} does not exist - downloading")
+            zf = download_zipfile_from_url(url)
+            unzip(zf)
 
-        data = load_unzipped_report(url, zf)
+            data = load_unzipped_report(url, zf)
 
-        #  unpacking the report dict - must be better way...
-        report = reports[report_id]
-        timestamp_col = report["interval-col"]
+            #  unpacking the report dict - must be better way...
+            report = reports[report_id]
+            timestamp_col = report["interval-col"]
 
-        data = make_dt_cols(data, report["dt-cols"])
+            data = make_dt_cols(data, report["dt-cols"])
 
-        #  accounting for AEMO stamping intervals at the end
-        #  usually intervals are stamped at the start
+            #  accounting for AEMO stamping intervals at the end
+            #  usually intervals are stamped at the start
+            data = add_interval_cols(data, timestamp_col, report["freq"])
 
-        freq = report["freq"]
-        interval_col = report["interval-col"]
-        data = add_interval_cols(data, timestamp_col, freq)
-
-        #  could check by assert difference == freq
-        path = Path(zf.parent)
-        print(f" saving csv and parquet to {path}/clean")
-        data.to_csv(path / "clean.csv")
-        data.to_parquet(path / "clean.parquet")
+            #  could check by assert difference == freq
+            print(f" saving csv and parquet to {url.home}/clean.{{csv,parquet}}")
+            data.to_csv(clean_fi.with_suffix(".csv"))
+            data.to_parquet(clean_fi.with_suffix(".parquet"))
 
         output.append(data)
 
