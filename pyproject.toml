@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "nemdata"
+version = "0.1.0"
+description = "Simple CLI for downloading data for Australia's NEM from AEMO."
+authors = ["Adam Green <adam.green@adgefficiency.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "nemdata"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.28.1"
+pandas = "^1.5.2"
+pyarrow = "^10.0.1"
+rich = "^12.6.0"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.0"
+coverage = "^6.5.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
