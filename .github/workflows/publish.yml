@@ -18,4 +18,4 @@ jobs:
           python-version: 3.10.6
       - name: Publish Package
         run: |
-          make pypi PYPIITOKEN=${{ secrets.PYPITOKEN }}
+          make pypi PYPITOKEN=${{ secrets.PYPITOKEN }}
