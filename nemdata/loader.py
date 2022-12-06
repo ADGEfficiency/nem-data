@@ -1,3 +1,4 @@
+import pathlib
 import pandas as pd
 from rich import print
 
@@ -31,8 +32,9 @@ def concat_trading_price(report_id, pkg):
     return pkg
 
 
-def loader(base_dir=DEFAULT_BASE_DIR, desired_reports=None):
+def loader(desired_reports=None, *, base_dir=DEFAULT_BASE_DIR):
     pkg = {}
+    base_dir = pathlib.Path(base_dir)
     report_ids = [p for p in base_dir.iterdir() if p.is_dir()]
     print(f" found {[r.name for r in report_ids]}")
 
