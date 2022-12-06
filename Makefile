@@ -3,10 +3,21 @@
 all: test
 
 setup:
-	pip install -r requirements.txt -q
-	pip install -e . -q
+	pip install poetry==1.2.2 -q
+	poetry install -q
 
-test: setup
-	pytest tests -s --capture=no
+setup-test: setup
+	poetry install --with test
 
-test-ci: test
+test: setup-test
+	pytest tests -s -x
+
+test-ci: setup-test
+	coverage run -m pytest tests --tb=short --show-capture=no
+	coverage report -m
+
+-include .env.secret
+pypi: setup
+	poetry build
+	@poetry config pypi-token.pypi $(PYPITOKEN)
+	poetry publish

@@ -7,19 +7,15 @@ from nemdata.nemde import download_nemde
 
 
 @click.command()
-@click.option("--start", "-s", default="2018-01", help="start date (YYYY-MM)")
-@click.option("--end", "-e", default="2018-03", help="end date (incusive) (YYYY-MM)")
 @click.option(
     "--report",
     "-r",
     help="nemde, " + ", ".join(mmsdm.reports.keys()),
 )
+@click.option("--start", "-s", default="2018-01", help="start date (YYYY-MM)")
+@click.option("--end", "-e", default="2018-03", help="end date (incusive) (YYYY-MM)")
 def cli(start, end, report):
-<<<<<<< Updated upstream
-    """nem-data is a tool to access NEM data"""
-=======
     """nemdata is a tool to access NEM data from AEMO."""
->>>>>>> Stashed changes
     print(":wave: from nemdata\n")
     download(start, end, report)
 
