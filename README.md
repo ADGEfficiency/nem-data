@@ -22,7 +22,7 @@ $ make setup
 $ nemdata --help
 Usage: nemdata [OPTIONS]
 
-  nem-data is a tool to access NEM data
+  nemdata is a tool to access NEM data from AEMO.
 
 Options:
   -s, --start TEXT    start date (YYYY-MM)

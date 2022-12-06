@@ -1,6 +1,7 @@
 nem-data/data/*
 data
 todo.md
+.env.secret
 
 # GENERIC
 # from https://github.com/github/gitignore/blob/master/Python.gitignore

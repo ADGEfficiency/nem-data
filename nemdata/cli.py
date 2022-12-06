@@ -15,7 +15,11 @@ from nemdata.nemde import download_nemde
     help="nemde, " + ", ".join(mmsdm.reports.keys()),
 )
 def cli(start, end, report):
+<<<<<<< Updated upstream
     """nem-data is a tool to access NEM data"""
+=======
+    """nemdata is a tool to access NEM data from AEMO."""
+>>>>>>> Stashed changes
     print(":wave: from nemdata\n")
     download(start, end, report)
 
