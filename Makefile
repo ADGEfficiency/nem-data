@@ -6,7 +6,7 @@ setup:
 	pip install poetry==1.2.2 -q
 	poetry install -q
 
-setup-test:
+setup-test: setup
 	poetry install --with test
 
 test: setup-test
@@ -17,7 +17,7 @@ test-ci: setup-test
 	coverage report -m
 
 -include .env.secret
-pypi:
+pypi: setup
 	poetry build
 	@poetry config pypi-token.pypi $(PYPITOKEN)
 	poetry publish
