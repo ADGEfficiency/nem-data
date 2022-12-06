@@ -21,6 +21,10 @@ lxml = "^4.9.1"
 pytest = "^7.2.0"
 coverage = "^6.5.0"
 
+
+[tool.poetry.scripts]
+nemdata = "nemdata.cli:cli"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
