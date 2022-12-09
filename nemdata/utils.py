@@ -8,6 +8,7 @@ URL = namedtuple("url", "url, year, month, report, csv, xml, home")
 
 
 def download_zipfile_from_url(url, chunk_size=128):
+    """download zipfile from a url and """
     path = url.home / "raw.zip"
     print(f" [green]downloading[/] {path.parts[-5:]}")
     r = requests.get(url.url, stream=True)
