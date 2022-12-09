@@ -2,7 +2,9 @@ from collections import namedtuple
 
 import pandas as pd
 import requests
+import pathlib
 from rich import print
+import nemdata
 
 URL = namedtuple("url", "url, year, month, report, csv, xml, home")
 
@@ -10,7 +12,7 @@ URL = namedtuple("url", "url, year, month, report, csv, xml, home")
 def download_zipfile_from_url(url, chunk_size=128):
     """download zipfile from a url and """
     path = url.home / "raw.zip"
-    print(f" [green]downloading[/] {path.parts[-5:]}")
+    print(f" [green]DOWNLOADING[/] {path.parts[-5:]}")
     r = requests.get(url.url, stream=True)
     with open(path, "wb") as fd:
         for chunk in r.iter_content(chunk_size=chunk_size):
