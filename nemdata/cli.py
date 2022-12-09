@@ -3,6 +3,7 @@ import pathlib
 import click
 import pandas as pd
 from rich import print
+import pathlib
 
 from nemdata import mmsdm
 from nemdata.config import DEFAULT_BASE_DIR
