@@ -7,9 +7,9 @@ import numpy as np
 import pandas as pd
 import requests
 
+# from nemdata.mmsdm import MMSDMFile, MMSDMTable
+# from nemdata.nemde import NEMDEFile, NEMDETable
 import nemdata
-from nemdata.mmsdm import MMSDMFile, MMSDMTable
-from nemdata.nemde import NEMDEFile, NEMDETable
 
 headers = {
     "referer": "https://aemo.com.au/",
@@ -18,7 +18,7 @@ headers = {
 
 
 def download_zipfile(
-    file: "typing.Union[MMSDMFile, NEMDEFile]",
+    file: typing.Union["nemdata.mmsdm.MMSDMFile", "nemdata.nemde.NEMDEFile"],
     chunk_size: int = 128,
 ) -> None:
     """download zipfile from a url and write to `file.data_directory / raw.zip`"""
@@ -36,7 +36,7 @@ def unzip(path: pathlib.Path) -> None:
 
 def add_interval_column(
     data: pd.DataFrame,
-    table: "typing.Union[MMSDMTable, NEMDETable]",
+    table: typing.Union["nemdata.mmsdm.MMSDMTable", "nemdata.nemde.NEMDETable"],
 ) -> pd.DataFrame:
     """add the `interval-start` and `interval-end` columns
     `interval_column` is interval end"""
