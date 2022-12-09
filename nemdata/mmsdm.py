@@ -9,14 +9,8 @@ import pydantic
 import requests
 from rich import print
 
-import nemdata
 from nemdata import utils
-from nemdata.config import DEFAULT_BASE_DIR
-
-headers = {
-    "referer": "https://aemo.com.au/",
-    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-}
+from nemdata.config import DEFAULT_BASE_DIRECTORY
 
 
 class VariableFrequency(pydantic.BaseModel):
@@ -47,8 +41,8 @@ mmsdm_tables = [
         name="unit-scada",
         table="DISPATCH_UNIT_SCADA",
         directory="DATA",
-        datetime_columns=["LASTCHANGED", "DATETIME"],
-        interval_column="DATETIME",
+        datetime_columns=["LASTCHANGED", "SETTLEMENTDATE"],
+        interval_column="SETTLEMENTDATE",
         frequency=5,
     ),
     MMSDMTable(
@@ -86,6 +80,23 @@ def find_mmsdm_table(name: str) -> MMSDMTable:
     )
 
 
+def make_many_mmsdm_files(
+    start: str, end: str, table: MMSDMTable, base_directory: pathlib.Path
+) -> list[MMSDMFile]:
+    """creates many MMSDMFiles - one for each month"""
+    table = find_mmsdm_table(table.name)
+    months = pd.date_range(start=start, end=end, freq="MS")
+
+    files = []
+    for year, month in zip(months.year, months.month):
+        files.append(
+            make_one_mmsdm_file(
+                year=year, month=month, table=table, base_directory=base_directory
+            )
+        )
+    return files
+
+
 def make_one_mmsdm_file(
     year: int, month: int, table: MMSDMTable, base_directory: pathlib.Path
 ) -> MMSDMFile:
@@ -113,35 +124,6 @@ def make_one_mmsdm_file(
         data_directory=data_directory,
         zipfile_path=data_directory / "raw.zip",
     )
-
-
-def make_many_mmsdm_files(start: str, end: str, table: MMSDMTable) -> list[MMSDMFile]:
-    """creates many MMSDMFile - one for each month"""
-    table = find_mmsdm_table(table.name)
-    months = pd.date_range(start=start, end=end, freq="MS")
-
-    files = []
-    for year, month in zip(months.year, months.month):
-        files.append(
-            make_one_mmsdm_file(
-                year=year,
-                month=month,
-                table=table,
-                base_directory=pathlib.Path("./temp"),
-            )
-        )
-    return files
-
-
-def download_zipfile_from_mmsdm_file(
-    mmsdm_file: nemdata.mmsdm_neu.MMSDMFile, chunk_size: int = 128
-) -> pathlib.Path:
-    """download zipfile from a url and write to `mmsdm_file.data_directory / raw.zip`"""
-    request = requests.get(mmsdm_file.url, stream=True, headers=headers)
-    assert request.ok
-    with open(mmsdm_file.zipfile_path, "wb") as fd:
-        for chunk in request.iter_content(chunk_size=chunk_size):
-            fd.write(chunk)
 
 
 def load_unzipped_mmsdm_file(mmsdm_file, skiprows=1, tail=-1):
@@ -202,11 +184,15 @@ def add_interval_column(
     return data
 
 
-def download_mmsdm(start: str, end: str, table_name: str):
+def download_mmsdm(
+    start: str,
+    end: str,
+    table_name: str,
+    base_directory: pathlib.Path = DEFAULT_BASE_DIRECTORY,
+):
     """main for downloading MMSDMFiles"""
-
     table = find_mmsdm_table(table_name)
-    files = make_many_mmsdm_files(start, end, table)
+    files = make_many_mmsdm_files(start, end, table, base_directory)
 
     dataset = []
     for mmsdm_file in files:
@@ -219,7 +205,7 @@ def download_mmsdm(start: str, end: str, table_name: str):
             print(
                 f" [green]DOWNLOADING[/] {' '.join(mmsdm_file.zipfile_path.parts[-5:])}"
             )
-            download_zipfile_from_mmsdm_file(mmsdm_file)
+            utils.download_zipfile(mmsdm_file)
             utils.unzip(mmsdm_file.zipfile_path)
             data = load_unzipped_mmsdm_file(mmsdm_file)
             assert table.datetime_columns

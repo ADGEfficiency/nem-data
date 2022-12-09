@@ -1,7 +1,7 @@
 import pytest
 
+from nemdata import mmsdm
 from nemdata.config import DEFAULT_BASE_DIR
-from nemdata import mmsdm_neu
 
 
 @pytest.mark.parametrize(
@@ -31,7 +31,7 @@ from nemdata import mmsdm_neu
     ],
 )
 def test_form_report_url(year, month, table, name, expected):
-    table = mmsdm_neu.MMSDMTable(
+    table = mmsdm.MMSDMTable(
         name=name,
         table=table,
         directory="DATA",

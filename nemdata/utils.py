@@ -1,23 +1,32 @@
+import pathlib
+import typing
 from collections import namedtuple
 
 import pandas as pd
 import requests
-import pathlib
 from rich import print
+
 import nemdata
 
 URL = namedtuple("url", "url, year, month, report, csv, xml, home")
 
 
-def download_zipfile_from_url(url, chunk_size=128):
-    """download zipfile from a url and """
-    path = url.home / "raw.zip"
-    print(f" [green]DOWNLOADING[/] {path.parts[-5:]}")
-    r = requests.get(url.url, stream=True)
-    with open(path, "wb") as fd:
-        for chunk in r.iter_content(chunk_size=chunk_size):
+headers = {
+    "referer": "https://aemo.com.au/",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+}
+
+
+def download_zipfile(
+    file: "typing.Union[nemdata.mmsdm.MMSDMFile, nemdata.nemde.NEMDEFile]",
+    chunk_size: int = 128,
+) -> None:
+    """download zipfile from a url and write to `file.data_directory / raw.zip`"""
+    request = requests.get(file.url, stream=True, headers=headers)
+    assert request.ok
+    with open(file.zipfile_path, "wb") as fd:
+        for chunk in request.iter_content(chunk_size=chunk_size):
             fd.write(chunk)
-    return path
 
 
 def unzip(path):

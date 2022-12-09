@@ -1,7 +1,6 @@
 import pytest
 
 from nemdata.config import DEFAULT_BASE_DIR
-from nemdata.mmsdm import make_report_url
 from nemdata.nemde import make_nemde_url
 
 
