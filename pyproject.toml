@@ -32,6 +32,10 @@ ipython = "^8.7.0"
 black = "^22.10.0"
 isort = "^5.10.1"
 
+
+[tool.poetry.group.static.dependencies]
+mypy = "^0.991"
+
 [tool.poetry.scripts]
 nemdata = "nemdata.cli:cli"
 

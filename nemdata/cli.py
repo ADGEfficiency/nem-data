@@ -1,6 +1,7 @@
 import pathlib
 
 import click
+import pandas as pd
 from rich import print
 
 from nemdata import mmsdm
@@ -27,7 +28,7 @@ def download(
     end: str,
     table_name: str,
     base_directory: pathlib.Path = DEFAULT_BASE_DIR,
-):
+) -> pd.DataFrame:
     print(f"[bold green]Downloader[/]: table: {table_name}")
     tables = {
         # "nemde": download_nemde,

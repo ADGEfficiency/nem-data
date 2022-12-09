@@ -4,6 +4,7 @@
 - add `pydantic`, `black` and `isort`,
 - introduce `MMSDMTable` and `MMSDMFile`,
 - add `make check`, `make lint` and `make static`,
+- added static typing checks,
 - added `frequency_minutes` as a column in `clean.parquet`.
 
 0.1.4 - cleanup of unused code.

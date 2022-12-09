@@ -14,6 +14,11 @@ from nemdata import utils
 from nemdata.config import DEFAULT_BASE_DIRECTORY
 
 
+class NEMDETable(pydantic.BaseModel):
+    frequency: int = 5
+    interval_column: str = "PeriodID"
+
+
 class NEMDEFile(pydantic.BaseModel):
     year: int
     month: int
@@ -65,7 +70,8 @@ def make_one_nemde_file(
     )
 
 
-def find_xmls(path):
+def find_xmls(path: pathlib.Path) -> list[pd.DataFrame]:
+    """find all XML files in a directory"""
     fis = [p for p in path.iterdir() if p.suffix == ".xml"]
     return [pd.read_xml(f) for f in fis]
 
@@ -74,8 +80,9 @@ def download_nemde(
     start: str,
     end: str,
     base_directory: pathlib.Path = DEFAULT_BASE_DIRECTORY,
-):
+) -> pd.DataFrame:
     """main for downloading MMSDMFiles"""
+    table = NEMDETable()
     files = make_many_nemde_files(start, end, base_directory)
     dataset = []
     for file in files:
@@ -92,11 +99,8 @@ def download_nemde(
             data = pd.concat(xmls, axis=0)
             #  get problems with a value of '5' without the cast to float
             data["BandNo"] = data["BandNo"].astype(float)
-
-            #  accounting for AEMO stamping intervals at the end
-            #  usually intervals are stamped at the start
             data["PeriodID"] = pd.to_datetime(data["PeriodID"]).dt.tz_localize(None)
-            data = utils.add_interval_cols(data, "PeriodID", "5T")
+            data = utils.add_interval_column(data, table)
 
             print(f" [green]SAVING [/] {clean_fi}")
             data.to_csv(clean_fi.with_suffix(".csv"))

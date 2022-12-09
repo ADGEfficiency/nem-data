@@ -30,13 +30,15 @@ from nemdata.config import DEFAULT_BASE_DIR
         ),
     ],
 )
-def test_form_report_url(year, month, table, name, expected):
-    table = mmsdm.MMSDMTable(
+def test_form_report_url(
+    year: int, month: int, table: str, name: str, expected: str
+) -> None:
+    mmsdm_table = mmsdm.MMSDMTable(
         name=name,
         table=table,
         directory="DATA",
     )
     file = mmsdm.make_one_mmsdm_file(
-        year, month, table, base_directory=DEFAULT_BASE_DIR
+        year, month=month, table=mmsdm_table, base_directory=DEFAULT_BASE_DIR
     )
     assert file.url == expected

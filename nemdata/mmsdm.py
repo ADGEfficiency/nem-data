@@ -126,7 +126,9 @@ def make_one_mmsdm_file(
     )
 
 
-def load_unzipped_mmsdm_file(mmsdm_file, skiprows=1, tail=-1):
+def load_unzipped_mmsdm_file(
+    mmsdm_file: MMSDMFile, skiprows: int = 1, tail: int = -1
+) -> pd.DataFrame:
     """read the CSV from an unzipped MMSDMFile"""
     path = mmsdm_file.data_directory / mmsdm_file.csv_name
     #  remove first row via skiprows
@@ -149,47 +151,12 @@ def make_datetime_columns(data: pd.DataFrame, table: MMSDMTable) -> pd.DataFrame
     return data
 
 
-def add_interval_column(
-    data: pd.DataFrame,
-    table: MMSDMTable,
-) -> pd.DataFrame:
-    """add the `interval-start` and `interval-end` columns
-    `interval_column` is interval end"""
-
-    interval = data[table.interval_column]
-    data.loc[:, "interval-end"] = interval
-
-    if isinstance(table.frequency, int):
-        data.loc[:, "frequency_minutes"] = table.frequency
-    else:
-        before_transition = (
-            data.loc[:, "interval-end"] < table.frequency.transition_datetime
-        )
-        data.loc[
-            before_transition, "frequency_minutes"
-        ] = table.frequency.frequency_minutes_before
-        after_transition = (
-            data.loc[:, "interval-end"] >= table.frequency.transition_datetime
-        )
-        data.loc[
-            after_transition, "frequency_minutes"
-        ] = table.frequency.frequency_minutes_after
-
-    #  ignore performance warning about no vectorization
-    with warnings.catch_warnings():
-        warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
-        data.loc[:, "interval-start"] = interval - np.array(
-            [pd.Timedelta(minutes=int(f)) for f in data["frequency_minutes"].values]
-        )
-    return data
-
-
 def download_mmsdm(
     start: str,
     end: str,
     table_name: str,
     base_directory: pathlib.Path = DEFAULT_BASE_DIRECTORY,
-):
+) -> pd.DataFrame:
     """main for downloading MMSDMFiles"""
     table = find_mmsdm_table(table_name)
     files = make_many_mmsdm_files(start, end, table, base_directory)
@@ -210,7 +177,7 @@ def download_mmsdm(
             data = load_unzipped_mmsdm_file(mmsdm_file)
             assert table.datetime_columns
             data = make_datetime_columns(data, table)
-            data = add_interval_column(data, table)
+            data = utils.add_interval_column(data, table)
 
             print(f" [green]SAVING [/] {clean_fi}")
             data.to_csv(clean_fi.with_suffix(".csv"))

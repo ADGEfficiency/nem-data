@@ -3,12 +3,15 @@
 all: test
 
 setup:
+	pip install pip -Uq
 	pip install poetry==1.2.2 -q
 	poetry install -q
 setup-test: setup
 	poetry install --with test
 setup-check: setup
 	poetry install --with check -q
+setup-static: setup
+	poetry install --with static -q
 
 test: setup-test
 	pytest tests -s -x

@@ -1,7 +1,9 @@
+import pathlib
+
 from nemdata.mmsdm import download_mmsdm
 
 
-def test_trading_price_transition(base_dir):
+def test_trading_price_transition(base_dir: pathlib.Path) -> None:
     data = download_mmsdm(
         start="2021-09",
         end="2021-09",

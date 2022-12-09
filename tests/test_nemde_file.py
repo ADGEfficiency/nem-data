@@ -27,6 +27,6 @@ from nemdata.config import DEFAULT_BASE_DIR
         ),
     ],
 )
-def test_form_nemde_url(year, month, day, expected):
-    file = nemde.make_one_nemde_file(year, month, day, base_dir=DEFAULT_BASE_DIR)
+def test_form_nemde_url(year: int, month: int, day: int, expected: str) -> None:
+    file = nemde.make_one_nemde_file(year, month, day, base_directory=DEFAULT_BASE_DIR)
     assert file.url == expected
