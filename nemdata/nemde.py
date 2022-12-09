@@ -45,7 +45,6 @@ def download_nemde(start, end, report_id, base_dir):
         zf = download_zipfile_from_url(url)
         unzip(zf)
         xmls = find_xmls(url.home)
-
         clean = pd.concat(xmls, axis=0)
 
         #  get problems with a value of '5' without the cast to float

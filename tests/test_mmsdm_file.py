@@ -36,7 +36,7 @@ def test_form_report_url(year, month, table, name, expected):
         table=table,
         directory="DATA",
     )
-    file = mmsdm_neu.make_one_mmsdm_file(
+    file = mmsdm.make_one_mmsdm_file(
         year, month, table, base_directory=DEFAULT_BASE_DIR
     )
     assert file.url == expected
