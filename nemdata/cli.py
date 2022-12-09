@@ -31,11 +31,13 @@ def download(
 ) -> pd.DataFrame:
     print(f"[bold green]Downloader[/]: table: {table_name}")
     tables = {
-        # "nemde": download_nemde,
+        "nemde": download_nemde,
         "trading-price": mmsdm.download_mmsdm,
         "unit-scada": mmsdm.download_mmsdm,
     }
-    return tables[table_name](start, end, table_name, base_directory=base_directory)
+    return tables[table_name](
+        start, end, table_name=table_name, base_directory=base_directory
+    )
 
 
 if __name__ == "__main__":

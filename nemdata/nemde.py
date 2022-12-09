@@ -79,6 +79,7 @@ def find_xmls(path: pathlib.Path) -> list[pd.DataFrame]:
 def download_nemde(
     start: str,
     end: str,
+    table_name: str = "nemde",
     base_directory: pathlib.Path = DEFAULT_BASE_DIRECTORY,
 ) -> pd.DataFrame:
     """main for downloading MMSDMFiles"""

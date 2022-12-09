@@ -4,12 +4,10 @@ A simple & opinionated Python command line tool to access Australian National En
 
 It is designed for use by researchers & data scientists - this tool supports my personal research work.  It is not designed for production use - see [NEMOSIS](https://github.com/UNSW-CEEM/NEMOSIS) for a production grade package.
 
-See [A hackers guide to AEMO & NEM data](https://adgefficiency.com/hackers-aemo/) for more on context the data provided by AEMO.
+See [A Hackers Guide to AEMO & NEM Data](https://adgefficiency.com/hackers-aemo/) for more on context the data provided by AEMO.
 
 
 ## Setup
-
-Install as editable package:
 
 ```bash
 $ make setup
