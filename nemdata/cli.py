@@ -1,9 +1,9 @@
 import pathlib
+import typing
 
 import click
 import pandas as pd
 from rich import print
-import pathlib
 
 from nemdata import mmsdm
 from nemdata.config import DEFAULT_BASE_DIR
@@ -31,7 +31,7 @@ def download(
     base_directory: pathlib.Path = DEFAULT_BASE_DIR,
 ) -> pd.DataFrame:
     print(f"[bold green]Downloader[/]: table: {table_name}")
-    tables = {
+    tables: dict[str, typing.Callable] = {
         "nemde": download_nemde,
         "trading-price": mmsdm.download_mmsdm,
         "unit-scada": mmsdm.download_mmsdm,
