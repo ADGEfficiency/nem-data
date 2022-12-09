@@ -3,7 +3,6 @@ from pathlib import Path
 
 import pandas as pd
 
-from nemdata.interfaces import scrape_url, unzip_file
 from nemdata.utils import URL, add_interval_cols, download_zipfile_from_url, unzip
 
 
