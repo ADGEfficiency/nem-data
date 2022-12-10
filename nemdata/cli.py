@@ -21,7 +21,7 @@ from nemdata.nemde import download_nemde
 def cli(start: str, end: str, report: str) -> None:
     """nemdata is a tool to access NEM data from AEMO."""
     print(":wave: from nemdata\n")
-    download(start, end, report)
+    download(start, end, table, dry_run=dry_run)
 
 
 def download(
