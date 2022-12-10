@@ -1,3 +1,7 @@
+0.2.1 
+- add `DISPATCHREGIONSUM` and `INTERCONNECTORRES` MMSDMTables,
+- add `skip publish` to publish CI.
+
 0.2.0
 - breaking change moving from concept of `report` to concept of `table`,
 - breaking CLI option change from `-r --report` to `-t` `--table`,

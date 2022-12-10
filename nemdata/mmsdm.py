@@ -57,6 +57,22 @@ mmsdm_tables = [
             frequency_minutes_after=5,
         ),
     ),
+    MMSDMTable(
+        name="demand",
+        table="DISPATCHREGIONSUM",
+        directory="DATA",
+        datetime_columns=["LASTCHANGED", "SETTLEMENTDATE"],
+        interval_column="SETTLEMENTDATE",
+        frequency=5,
+    ),
+    MMSDMTable(
+        name="interconnectors",
+        table="INTERCONNECTORRES",
+        directory="DATA",
+        datetime_columns=["LASTCHANGED", "SETTLEMENTDATE"],
+        interval_column="SETTLEMENTDATE",
+        frequency=5,
+    ),
 ]
 
 

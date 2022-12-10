@@ -41,6 +41,8 @@ def download(
         "nemde": download_nemde,
         "trading-price": mmsdm.download_mmsdm,
         "unit-scada": mmsdm.download_mmsdm,
+        "demand": mmsdm.download_mmsdm,
+        "interconnectors": mmsdm.download_mmsdm,
     }
     return tables[table_name](
         start,
