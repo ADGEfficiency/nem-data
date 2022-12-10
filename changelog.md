@@ -1,3 +1,5 @@
+0.2.1 - add `DISPATCHREGIONSUM` and `INTERCONNECTORRES`.
+
 0.2.0
 - breaking change moving from concept of `report` to concept of `table`,
 - CLI option change from `-r --report` to `-t` `--table`,
