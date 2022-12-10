@@ -30,12 +30,7 @@ Options:
   --help                    Show this message and exit.
 ```
 
-`nem-data` supports downloading the following data:
-
-- `nemde`, 
-- `predispatch`, 
-- `unit-scada` ,
-- `trading-price`.
+`nem-data` supports downloading the following data - `nemde`, `predispatch`, `unit-scada` and `trading-price`.
 
 To download NEMDE data:
 
