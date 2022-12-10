@@ -4,12 +4,10 @@ A simple & opinionated Python command line tool to access Australian National En
 
 It is designed for use by researchers & data scientists - this tool supports my personal research work.  It is not designed for production use - see [NEMOSIS](https://github.com/UNSW-CEEM/NEMOSIS) for a production grade package.
 
-See [A hackers guide to AEMO & NEM data](https://adgefficiency.com/hackers-aemo/) for more on context the data provided by AEMO.
+See [A Hackers Guide to AEMO & NEM Data](https://adgefficiency.com/hackers-aemo/) for more on context the data provided by AEMO.
 
 
 ## Setup
-
-Install as editable package:
 
 ```bash
 $ make setup
@@ -83,4 +81,4 @@ A few things happen during data processing:
 
 - the top & bottom rows of the raw CSV are removed,
 - `interval-start` and `interval-end` columns are added,
-- for `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).
+- when using `nemdata.loader.loader` for the `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).

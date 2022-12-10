@@ -1,18 +1,20 @@
 import pathlib
+import typing
+
 import pandas as pd
 from rich import print
 
 from nemdata.config import DEFAULT_BASE_DIR
 
 
-def concat(report_id, pkg):
+def concat(report_id: pathlib.Path, pkg: dict) -> dict:
     data = [p for p in report_id.glob("**/clean.parquet")]
     data = [pd.read_parquet(p) for p in data]
     pkg[report_id.name] = pd.concat(data, axis=0)
     return pkg
 
 
-def concat_trading_price(report_id, pkg):
+def concat_trading_price(report_id: pathlib.Path, pkg: dict) -> dict:
     fis = [p for p in report_id.glob("**/clean.parquet")]
     datas = []
     for fi in fis:
@@ -32,8 +34,12 @@ def concat_trading_price(report_id, pkg):
     return pkg
 
 
-def loader(desired_reports=None, *, base_dir=DEFAULT_BASE_DIR):
-    pkg = {}
+def loader(
+    desired_reports: typing.Union[dict, None] = None,
+    *,
+    base_dir: pathlib.Path = DEFAULT_BASE_DIR,
+) -> dict:
+    pkg: dict = {}
     base_dir = pathlib.Path(base_dir)
     report_ids = [p for p in base_dir.iterdir() if p.is_dir()]
     print(f" found {[r.name for r in report_ids]}")
