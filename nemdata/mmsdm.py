@@ -156,6 +156,7 @@ def download_mmsdm(
     end: str,
     table_name: str,
     base_directory: pathlib.Path = DEFAULT_BASE_DIRECTORY,
+    dry_run: bool = False,
 ) -> pd.DataFrame:
     """main for downloading MMSDMFiles"""
     table = find_mmsdm_table(table_name)
@@ -179,9 +180,10 @@ def download_mmsdm(
             data = make_datetime_columns(data, table)
             data = utils.add_interval_column(data, table)
 
-            print(f" [green]SAVING [/] {clean_fi}")
-            data.to_csv(clean_fi.with_suffix(".csv"))
-            data.to_parquet(clean_fi.with_suffix(".parquet"))
+            if not dry_run:
+                print(f" [green]SAVING [/] {clean_fi}")
+                data.to_csv(clean_fi.with_suffix(".csv"))
+                data.to_parquet(clean_fi.with_suffix(".parquet"))
         dataset.append(data)
     return pd.concat(dataset, axis=0)
 

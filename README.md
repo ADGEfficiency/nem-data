@@ -81,4 +81,4 @@ A few things happen during data processing:
 
 - the top & bottom rows of the raw CSV are removed,
 - `interval-start` and `interval-end` columns are added,
-- for `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).
+- when using `nemdata.loader.loader` for the `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).
