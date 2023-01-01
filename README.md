@@ -40,13 +40,13 @@ Options:
 
 Download NEMDE data for the first three days in January 2018:
 
-```bash
+```shell-session
 $ nemdata -t nemde --start 2018-01-01 --end 2018-01-03
 ```
 
 Download trading price data from MMSDM for January to March 2018:
 
-```python
+```shell-session
 $ nemdata -t trading-price -s 2018-01 -e 2018-03
 ```
 
