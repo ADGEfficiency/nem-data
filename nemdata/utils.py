@@ -29,6 +29,7 @@ def download_zipfile(
 
 
 def unzip(path: pathlib.Path) -> None:
+    """unzip a zip file to it's parent path"""
     with zipfile.ZipFile(path, "r") as zip_ref:
         zip_ref.extractall(path.parent)
 
@@ -37,8 +38,7 @@ def add_interval_column(
     data: pd.DataFrame,
     table: "typing.Union[mmsdm.MMSDMTable, nemde.NEMDETable]",
 ) -> pd.DataFrame:
-    """add the `interval-start` and `interval-end` columns
-    `interval_column` is interval end"""
+    """add the `interval-start` and `interval-end` columns"""
 
     interval = data[table.interval_column]
     data.loc[:, "interval-end"] = interval
