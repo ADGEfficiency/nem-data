@@ -1,51 +1,73 @@
 # nem-data
 
-A simple & opinionated Python command line tool to access Australian National Energy Market (NEM) data provided by the Australian Energy Market Operator (AEMO).
+A simple & opinionated Python command line tool to access Australian National Energy Market (NEM) data provided by the Australian Energy Market Operator (AEMO).  It features:
+
+- access to the NEMDE dataset as well as the predispatch, unit-scada, trading-price, demand and interconnectors tables from MMSDM,
+- a cache to not re-download data that already exists in `~/nem-data/data`,
+- adds `interval-start` and `interval-end` columns.
 
 It is designed for use by researchers & data scientists - this tool supports my personal research work.  It is not designed for production use - see [NEMOSIS](https://github.com/UNSW-CEEM/NEMOSIS) for a production grade package.
 
-See [A Hackers Guide to AEMO & NEM Data](https://adgefficiency.com/hackers-aemo/) for more on context the data provided by AEMO.
+See [A Hackers Guide to AEMO & NEM Data](https://adgefficiency.com/hackers-aemo/) for more context on the data provided by AEMO.
 
 
 ## Setup
 
 ```bash
-$ make setup
+$ pip install nemdata
 ```
 
 
 ## Use
 
+### CLI
+
 ```shell-session
 $ nemdata --help
 Usage: nemdata [OPTIONS]
 
-  nemdata is a tool to access NEM data from AEMO.
+  Downloads NEM data from AEMO.
 
 Options:
-  -t, --table TEXT          nemde, predispatch, unit-scada, trading-price
-  -s, --start TEXT          start date (YYYY-MM)
-  -e, --end TEXT            end date (incusive) (YYYY-MM)
-  --dry-run / --no-dry-run  whether to save downloaded data to disk
+  -t, --table TEXT          Available data is nemde, predispatch, unit-scada,
+                            trading-price, demand, interconnectors.
+  -s, --start TEXT          Start date (YYYY-MM or YYYY-MM-DD for NEMDE).
+  -e, --end TEXT            End date (incusive) (YYYY-MM or YYYY-MM-DD for
+                            NEMDE).
+  --dry-run / --no-dry-run  Whether to save downloaded data to disk.
   --help                    Show this message and exit.
 ```
 
-`nem-data` supports downloading the following data - `nemde`, `predispatch`, `unit-scada` and `trading-price`.
+Download NEMDE data for the first three days in January 2018:
 
-To download NEMDE data:
-
-```bash
-$ nemdata -t nemde --start 2018-01 --end 2018-03
+```shell-session
+$ nemdata -t nemde --start 2018-01-01 --end 2018-01-03
 ```
 
-To download trading price data:
+Download trading price data from MMSDM for January to March 2018:
 
-```python
+```shell-session
 $ nemdata -t trading-price -s 2018-01 -e 2018-03
 ```
 
+### Python
 
-## Output Data
+Download trading price data from MMSDM for January to Feburary 2020:
+
+```python
+import nemdata
+
+data = nemdata.download(start="2020-01", end="2020-02", table="trading-price")
+```
+
+Load this data back into Python:
+
+```python
+data = nemdata.load()['trading-price']
+```
+
+
+## Data
 
 Data is downloaded into into `$HOME/nem-data/data/`:
 
@@ -65,12 +87,10 @@ $ tree ~/nem-data
             ├── clean.csv
             ├── clean.parquet
             └── raw.zip
-
-4 directories, 8 files
 ```
 
 A few things happen during data processing:
 
-- the top & bottom rows of the raw CSV are removed,
+- the top & bottom rows of the raw CSV are removed to create a rectangular CSV,
 - `interval-start` and `interval-end` columns are added,
 - when using `nemdata.loader.loader` for the `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).
