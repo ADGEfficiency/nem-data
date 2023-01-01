@@ -34,13 +34,13 @@ def concat_trading_price(report_id: pathlib.Path, pkg: dict) -> dict:
     return pkg
 
 
-def loader(
+def load(
     desired_reports: typing.Union[dict, None] = None,
     *,
-    base_dir: pathlib.Path = DEFAULT_BASE_DIR,
+    base_directory: pathlib.Path = DEFAULT_BASE_DIR,
 ) -> dict:
     pkg: dict = {}
-    base_dir = pathlib.Path(base_dir)
+    base_dir = pathlib.Path(base_directory)
     report_ids = [p for p in base_dir.iterdir() if p.is_dir()]
     print(f" found {[r.name for r in report_ids]}")
 

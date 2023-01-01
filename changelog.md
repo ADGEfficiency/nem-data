@@ -1,3 +1,8 @@
+0.3.0
+- introduce `nemdata.downloader`,
+- rename `nemdata.loader.loader` to `nemdata.loader.load`,
+- add tests for README Python code.
+
 0.2.1 
 - add `DISPATCHREGIONSUM` and `INTERCONNECTORRES` MMSDMTables,
 - add `skip publish` to publish CI.
@@ -13,7 +18,7 @@
 - added static typing check to CI,
 - added `frequency_minutes` as a column in `clean.parquet`.
 
-0.1.4 - cleanup of unused code.
+0.1.4 - cleanup unused code.
 
 0.1.3 - fix loader bug.
 

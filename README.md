@@ -10,11 +10,13 @@ See [A Hackers Guide to AEMO & NEM Data](https://adgefficiency.com/hackers-aemo/
 ## Setup
 
 ```bash
-$ make setup
+$ pip install nemdata
 ```
 
 
 ## Use
+
+### CLI
 
 ```shell-session
 $ nemdata --help
@@ -30,18 +32,34 @@ Options:
   --help                    Show this message and exit.
 ```
 
-`nem-data` supports downloading the following data - `nemde`, `predispatch`, `unit-scada` and `trading-price`.
-
-To download NEMDE data:
+To download NEMDE data for the first three days in January 2018:
 
 ```bash
-$ nemdata -t nemde --start 2018-01 --end 2018-03
+$ nemdata -t nemde --start 2018-01-01 --end 2018-01-01
 ```
 
-To download trading price data:
+To download trading price data from MMSDM for January to March 2018:
 
 ```python
 $ nemdata -t trading-price -s 2018-01 -e 2018-03
+```
+
+### Python
+
+To download trading price data from MMSDM for January to Feburary 2020:
+
+```python
+import nemdata
+
+data = nemdata.download(start="2020-01", end="2020-02", table="trading-price")
+```
+
+To load this data:
+
+```python
+import nemdata
+
+data = nemdata.load()['trading-price']
 ```
 
 
