@@ -29,7 +29,7 @@ Usage: nemdata [OPTIONS]
   Downloads NEM data from AEMO.
 
 Options:
-  -t, --table TEXT          Available data is nemde, predispatch, unit-scada,
+  -t, --table TEXT          Available tables: nemde, predispatch, unit-scada,
                             trading-price, demand, interconnectors.
   -s, --start TEXT          Start date (YYYY-MM or YYYY-MM-DD for NEMDE).
   -e, --end TEXT            End date (incusive) (YYYY-MM or YYYY-MM-DD for
@@ -92,5 +92,5 @@ $ tree ~/nem-data
 A few things happen during data processing:
 
 - the top & bottom rows of the raw CSV are removed to create a rectangular CSV,
-- `interval-start` and `interval-end` columns are added,
-- when using `nemdata.loader.loader` for the `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).
+- `interval-start` and `interval-end` columns are added with timezones,
+- when using `nemdata.loader.loader` for the `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change),

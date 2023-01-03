@@ -9,7 +9,7 @@ from nemdata.downloader import download
 @click.option(
     "--table",
     "-t",
-    help="Available data is nemde, "
+    help="Available tables: nemde, "
     + ", ".join([table.name for table in mmsdm.mmsdm_tables])
     + ".",
 )
