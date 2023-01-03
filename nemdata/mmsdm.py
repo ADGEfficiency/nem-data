@@ -54,7 +54,7 @@ mmsdm_tables = [
         interval_column="SETTLEMENTDATE",
         frequency=VariableFrequency(
             frequency_minutes_before=30,
-            transition_datetime="2021-10-01T00:05:00+1000",
+            transition_datetime=constants.transition_datetime,
             frequency_minutes_after=5,
         ),
     ),
