@@ -3,7 +3,7 @@ import pytest
 from nemdata.mmsdm import find_mmsdm_table
 
 
-def test_find_mmsdm_table():
+def test_find_mmsdm_table() -> None:
     table = find_mmsdm_table("trading-price")
     assert table.name == "trading-price"
 
