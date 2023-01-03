@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import requests
 
-import nemdata
 from nemdata import mmsdm, nemde
 
 headers = {
@@ -48,13 +47,16 @@ def add_interval_column(
     else:
         assert table.frequency
         before_transition = (
-            data.loc[:, "interval-end"] < table.frequency.transition_datetime
+            data.loc[:, "interval-end"]
+            < table.frequency.transition_datetime_interval_end
         )
         data.loc[
             before_transition, "frequency_minutes"
         ] = table.frequency.frequency_minutes_before
+
         after_transition = (
-            data.loc[:, "interval-end"] >= table.frequency.transition_datetime
+            data.loc[:, "interval-end"]
+            >= table.frequency.transition_datetime_interval_end
         )
         data.loc[
             after_transition, "frequency_minutes"

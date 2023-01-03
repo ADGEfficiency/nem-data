@@ -9,4 +9,4 @@ def test_find_mmsdm_table():
 
     with pytest.raises(ValueError) as err:
         find_mmsdm_table("missing-table")
-        assert "missing-table not found" in str(err)
+    assert "missing-table not found" in str(err)

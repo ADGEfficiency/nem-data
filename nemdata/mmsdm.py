@@ -17,7 +17,7 @@ from nemdata.constants import constants
 class VariableFrequency(pydantic.BaseModel):
     frequency_minutes_before: int
     frequency_minutes_after: int
-    transition_datetime: datetime.datetime
+    transition_datetime_interval_end: datetime.datetime
 
 
 class MMSDMTable(pydantic.BaseModel):
@@ -54,7 +54,7 @@ mmsdm_tables = [
         interval_column="SETTLEMENTDATE",
         frequency=VariableFrequency(
             frequency_minutes_before=30,
-            transition_datetime=constants.transition_datetime,
+            transition_datetime_interval_end=constants.transition_datetime_interval_end,
             frequency_minutes_after=5,
         ),
     ),
