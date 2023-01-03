@@ -1,3 +1,8 @@
+0.3.1
+- add timezones to MMSDM and NEMDE data,
+- added `make clean` to remove the data cache,
+- added `nemdata.constants` for the NEM timezone.
+
 0.3.0
 - introduce `nemdata.downloader`,
 - rename `nemdata.loader.loader` to `nemdata.loader.load`,
