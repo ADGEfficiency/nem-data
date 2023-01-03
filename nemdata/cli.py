@@ -34,7 +34,3 @@ def cli(start: str, end: str, table: str, dry_run: bool) -> None:
     """Downloads NEM data from AEMO."""
     print(":wave: from nemdata\n")
     download(start, end, table, dry_run=dry_run)
-
-
-if __name__ == "__main__":
-    cli()
