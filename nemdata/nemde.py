@@ -122,5 +122,11 @@ def download_nemde(
                 print(f" [green]SAVING [/] {clean_fi}")
                 data.to_csv(clean_fi.with_suffix(".csv"))
                 data.to_parquet(clean_fi.with_suffix(".parquet"))
-        dataset.append(data)
-    return pd.concat(dataset, axis=0)
+
+        if data is not None:
+            dataset.append(data)
+
+    try:
+        return pd.concat(dataset, axis=0)
+    except ValueError:
+        return pd.DataFrame()
