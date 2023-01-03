@@ -11,6 +11,7 @@ from rich import print
 
 from nemdata import utils
 from nemdata.config import DEFAULT_BASE_DIRECTORY
+from nemdata.constants import constants
 
 
 class VariableFrequency(pydantic.BaseModel):
@@ -53,7 +54,7 @@ mmsdm_tables = [
         interval_column="SETTLEMENTDATE",
         frequency=VariableFrequency(
             frequency_minutes_before=30,
-            transition_datetime="2021-10-01T00:05:00",
+            transition_datetime="2021-10-01T00:05:00+1000",
             frequency_minutes_after=5,
         ),
     ),
@@ -162,6 +163,7 @@ def make_datetime_columns(data: pd.DataFrame, table: MMSDMTable) -> pd.DataFrame
     for col in datetime_columns:
         try:
             data[col] = pd.to_datetime(data[col])
+            data[col] = data[col].dt.tz_localize(constants.nem_tz)
         except KeyError:
             pass
     return data
@@ -202,7 +204,3 @@ def download_mmsdm(
                 data.to_parquet(clean_fi.with_suffix(".parquet"))
         dataset.append(data)
     return pd.concat(dataset, axis=0)
-
-
-if __name__ == "__main__":
-    download_mmsdm(start="2021-10", end="2021-11", table_name="trading-price")

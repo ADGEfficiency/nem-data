@@ -2,6 +2,9 @@
 
 all: test
 
+clean:
+	rm -rf ~/nem-data/data
+
 setup:
 	pip install pip -Uq
 	pip install poetry==1.2.2 -q

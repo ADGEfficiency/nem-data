@@ -9,9 +9,9 @@ import pydantic
 import requests
 from rich import print
 
-import nemdata
 from nemdata import utils
 from nemdata.config import DEFAULT_BASE_DIRECTORY
+from nemdata.constants import constants
 
 
 class NEMDETable(pydantic.BaseModel):
@@ -101,7 +101,13 @@ def download_nemde(
             data = pd.concat(xmls, axis=0)
             #  get problems with a value of '5' without the cast to float
             data["BandNo"] = data["BandNo"].astype(float)
-            data["PeriodID"] = pd.to_datetime(data["PeriodID"]).dt.tz_localize(None)
+
+            #  already timezone aware here
+            data["PeriodID"] = pd.to_datetime(data["PeriodID"])
+            assert data["PeriodID"].dt.tz._offset == datetime.timedelta(
+                seconds=3600 * 10
+            )
+            data["PeriodID"] = data["PeriodID"].dt.tz_convert(constants.nem_tz)
             data = utils.add_interval_column(data, table)
 
             if not dry_run:
