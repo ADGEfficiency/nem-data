@@ -90,10 +90,18 @@ def download_nemde(
     for file in files:
         clean_fi = file.data_directory / "clean.parquet"
         if clean_fi.exists():
-            print(f" [blue]EXISTS[/] {' '.join(clean_fi.parts[-5:])}")
+            print(f" [blue]CACHED[/] {' '.join(clean_fi.parts[-5:])}")
             data = pd.read_parquet(clean_fi)
         else:
-            print(f" [blue]MISSING[/] {' '.join(clean_fi.parts[-5:])}")
+            print(f" [blue]NOT CACHED[/] {' '.join(clean_fi.parts[-5:])}")
+
+        data_available = utils.download_zipfile(file)
+
+        if not data_available:
+            print(f" [red]NOT AVAILABLE[/] {' '.join(file.zipfile_path.parts[-5:])}")
+            data = None
+
+        else:
             print(f" [green]DOWNLOADING[/] {' '.join(file.zipfile_path.parts[-5:])}")
             utils.download_zipfile(file)
             utils.unzip(file.zipfile_path)

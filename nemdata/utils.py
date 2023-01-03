@@ -18,13 +18,16 @@ headers = {
 def download_zipfile(
     file: "typing.Union[mmsdm.MMSDMFile, nemde.NEMDEFile]",
     chunk_size: int = 128,
-) -> None:
+) -> bool:
     """download zipfile from a url and write to `file.data_directory / raw.zip`"""
     request = requests.get(file.url, stream=True, headers=headers)
-    assert request.ok
-    with open(file.zipfile_path, "wb") as fd:
-        for chunk in request.iter_content(chunk_size=chunk_size):
-            fd.write(chunk)
+    is_data_available = request.ok
+    if is_data_available:
+        with open(file.zipfile_path, "wb") as fd:
+            for chunk in request.iter_content(chunk_size=chunk_size):
+                fd.write(chunk)
+
+    return is_data_available
 
 
 def unzip(path: pathlib.Path) -> None:
