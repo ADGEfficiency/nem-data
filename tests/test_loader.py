@@ -10,7 +10,7 @@ def test_loader_unit_scada(base_dir: pathlib.Path) -> None:
     download("2020-01", "2020-01", "unit-scada", base_directory=base_dir)
     data = load(base_directory=base_dir)["unit-scada"]
     assert data["interval-start"].min() == pd.Timestamp("2020-01-01T00:00:00+1000")
-    assert data["interval-start"].min() == pd.Timestamp("2020-01-31T23:55:00+1000")
+    assert data["interval-start"].max() == pd.Timestamp("2020-01-31T23:55:00+1000")
 
 
 def test_loader_trading_prices(base_dir: pathlib.Path) -> None:
