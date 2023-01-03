@@ -116,7 +116,3 @@ def download_nemde(
                 data.to_parquet(clean_fi.with_suffix(".parquet"))
         dataset.append(data)
     return pd.concat(dataset, axis=0)
-
-
-if __name__ == "__main__":
-    download_nemde(start="2021-10-01", end="2021-10-01")

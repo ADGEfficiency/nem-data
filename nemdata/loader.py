@@ -35,7 +35,7 @@ def concat_trading_price(report_id: pathlib.Path, pkg: dict) -> dict:
 
 
 def load(
-    desired_reports: typing.Union[dict, None] = None,
+    desired_reports: typing.Union[list, None] = None,
     *,
     base_directory: pathlib.Path = DEFAULT_BASE_DIR,
 ) -> dict:
