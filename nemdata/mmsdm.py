@@ -182,40 +182,42 @@ def download_mmsdm(
 
     dataset = []
     for mmsdm_file in files:
-        clean_fi = mmsdm_file.data_directory / "clean.parquet"
-        if clean_fi.exists():
-            print(f" [blue]CACHED[/] {' '.join(clean_fi.parts[-5:])}")
-            data = pd.read_parquet(clean_fi)
-        else:
-            print(f" [blue]NOT CACHED[/] {' '.join(clean_fi.parts[-5:])}")
-
-        data_available = utils.download_zipfile(mmsdm_file)
-
-        if not data_available:
-            print(
-                f" [red]NOT AVAILABLE[/] {' '.join(mmsdm_file.zipfile_path.parts[-5:])}"
-            )
-            data = None
-
-        else:
-            print(
-                f" [green]DOWNLOADING[/] {' '.join(mmsdm_file.zipfile_path.parts[-5:])}"
-            )
-            utils.unzip(mmsdm_file.zipfile_path)
-            data = load_unzipped_mmsdm_file(mmsdm_file)
-            assert table.datetime_columns
-            data = make_datetime_columns(data, table)
-            data = utils.add_interval_column(data, table)
-
-            if not dry_run:
-                print(f" [green]SAVING [/] {clean_fi}")
-                data.to_csv(clean_fi.with_suffix(".csv"))
-                data.to_parquet(clean_fi.with_suffix(".parquet"))
-
+        data = download_one_mmsdm(table, mmsdm_file, dry_run)
         if data is not None:
             dataset.append(data)
-
     try:
         return pd.concat(dataset, axis=0)
     except ValueError:
         return pd.DataFrame()
+
+
+def download_one_mmsdm(
+    table: MMSDMTable, mmsdm_file: MMSDMFile, dry_run: bool
+) -> typing.Union[pd.DataFrame, None]:
+    clean_fi = mmsdm_file.data_directory / "clean.parquet"
+    if clean_fi.exists():
+        print(f" [blue]CACHED[/] {' '.join(clean_fi.parts[-5:])}")
+        return pd.read_parquet(clean_fi)
+    else:
+        print(f" [blue]NOT CACHED[/] {' '.join(clean_fi.parts[-5:])}")
+
+    data_available = utils.download_zipfile(mmsdm_file)
+
+    if not data_available:
+        print(f" [red]NOT AVAILABLE[/] {' '.join(mmsdm_file.zipfile_path.parts[-5:])}")
+        return None
+
+    else:
+        print(f" [green]DOWNLOADING[/] {' '.join(mmsdm_file.zipfile_path.parts[-5:])}")
+        utils.unzip(mmsdm_file.zipfile_path)
+        data = load_unzipped_mmsdm_file(mmsdm_file)
+        assert table.datetime_columns
+        data = make_datetime_columns(data, table)
+        data = utils.add_interval_column(data, table)
+
+        if not dry_run:
+            print(f" [green]SAVING [/] {clean_fi}")
+            data.to_csv(clean_fi.with_suffix(".csv"))
+            data.to_parquet(clean_fi.with_suffix(".parquet"))
+
+        return data
