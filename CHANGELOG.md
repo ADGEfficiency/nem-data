@@ -1,3 +1,6 @@
+0.3.2
+- fix bug introduced in 0.3.1 where cache not used properly.
+
 0.3.1
 - add timezones to MMSDM and NEMDE data,
 - added `make clean` to remove the data cache,
