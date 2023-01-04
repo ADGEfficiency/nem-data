@@ -16,7 +16,7 @@ def download(
     base_directory: pathlib.Path = DEFAULT_BASE_DIR,
     dry_run: bool = False,
 ) -> pd.DataFrame:
-    print(f"[bold green]Downloader[/]: table: {table}")
+    print(f"[bold green]Downloader[/]: {table}")
     tables: dict[str, typing.Callable] = {
         "nemde": download_nemde,
         "trading-price": mmsdm.download_mmsdm,
