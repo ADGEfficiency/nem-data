@@ -11,12 +11,13 @@ from rich import print
 
 from nemdata import utils
 from nemdata.config import DEFAULT_BASE_DIRECTORY
+from nemdata.constants import constants
 
 
 class VariableFrequency(pydantic.BaseModel):
     frequency_minutes_before: int
     frequency_minutes_after: int
-    transition_datetime: datetime.datetime
+    transition_datetime_interval_end: datetime.datetime
 
 
 class MMSDMTable(pydantic.BaseModel):
@@ -53,7 +54,7 @@ mmsdm_tables = [
         interval_column="SETTLEMENTDATE",
         frequency=VariableFrequency(
             frequency_minutes_before=30,
-            transition_datetime="2021-10-01T00:05:00",
+            transition_datetime_interval_end=constants.transition_datetime_interval_end,
             frequency_minutes_after=5,
         ),
     ),
@@ -162,6 +163,7 @@ def make_datetime_columns(data: pd.DataFrame, table: MMSDMTable) -> pd.DataFrame
     for col in datetime_columns:
         try:
             data[col] = pd.to_datetime(data[col])
+            data[col] = data[col].dt.tz_localize(constants.nem_tz)
         except KeyError:
             pass
     return data
@@ -182,14 +184,23 @@ def download_mmsdm(
     for mmsdm_file in files:
         clean_fi = mmsdm_file.data_directory / "clean.parquet"
         if clean_fi.exists():
-            print(f" [blue]EXISTS[/] {' '.join(clean_fi.parts[-5:])}")
+            print(f" [blue]CACHED[/] {' '.join(clean_fi.parts[-5:])}")
             data = pd.read_parquet(clean_fi)
         else:
-            print(f" [blue]MISSING[/] {' '.join(clean_fi.parts[-5:])}")
+            print(f" [blue]NOT CACHED[/] {' '.join(clean_fi.parts[-5:])}")
+
+        data_available = utils.download_zipfile(mmsdm_file)
+
+        if not data_available:
+            print(
+                f" [red]NOT AVAILABLE[/] {' '.join(mmsdm_file.zipfile_path.parts[-5:])}"
+            )
+            data = None
+
+        else:
             print(
                 f" [green]DOWNLOADING[/] {' '.join(mmsdm_file.zipfile_path.parts[-5:])}"
             )
-            utils.download_zipfile(mmsdm_file)
             utils.unzip(mmsdm_file.zipfile_path)
             data = load_unzipped_mmsdm_file(mmsdm_file)
             assert table.datetime_columns
@@ -200,9 +211,11 @@ def download_mmsdm(
                 print(f" [green]SAVING [/] {clean_fi}")
                 data.to_csv(clean_fi.with_suffix(".csv"))
                 data.to_parquet(clean_fi.with_suffix(".parquet"))
-        dataset.append(data)
-    return pd.concat(dataset, axis=0)
 
+        if data is not None:
+            dataset.append(data)
 
-if __name__ == "__main__":
-    download_mmsdm(start="2021-10", end="2021-11", table_name="trading-price")
+    try:
+        return pd.concat(dataset, axis=0)
+    except ValueError:
+        return pd.DataFrame()

@@ -9,9 +9,9 @@ import pydantic
 import requests
 from rich import print
 
-import nemdata
 from nemdata import utils
 from nemdata.config import DEFAULT_BASE_DIRECTORY
+from nemdata.constants import constants
 
 
 class NEMDETable(pydantic.BaseModel):
@@ -90,10 +90,18 @@ def download_nemde(
     for file in files:
         clean_fi = file.data_directory / "clean.parquet"
         if clean_fi.exists():
-            print(f" [blue]EXISTS[/] {' '.join(clean_fi.parts[-5:])}")
+            print(f" [blue]CACHED[/] {' '.join(clean_fi.parts[-5:])}")
             data = pd.read_parquet(clean_fi)
         else:
-            print(f" [blue]MISSING[/] {' '.join(clean_fi.parts[-5:])}")
+            print(f" [blue]NOT CACHED[/] {' '.join(clean_fi.parts[-5:])}")
+
+        data_available = utils.download_zipfile(file)
+
+        if not data_available:
+            print(f" [red]NOT AVAILABLE[/] {' '.join(file.zipfile_path.parts[-5:])}")
+            data = None
+
+        else:
             print(f" [green]DOWNLOADING[/] {' '.join(file.zipfile_path.parts[-5:])}")
             utils.download_zipfile(file)
             utils.unzip(file.zipfile_path)
@@ -101,16 +109,24 @@ def download_nemde(
             data = pd.concat(xmls, axis=0)
             #  get problems with a value of '5' without the cast to float
             data["BandNo"] = data["BandNo"].astype(float)
-            data["PeriodID"] = pd.to_datetime(data["PeriodID"]).dt.tz_localize(None)
+
+            #  already timezone aware here
+            data["PeriodID"] = pd.to_datetime(data["PeriodID"])
+            assert data["PeriodID"].dt.tz._offset == datetime.timedelta(
+                seconds=3600 * 10
+            )
+            data["PeriodID"] = data["PeriodID"].dt.tz_convert(constants.nem_tz)
             data = utils.add_interval_column(data, table)
 
             if not dry_run:
                 print(f" [green]SAVING [/] {clean_fi}")
                 data.to_csv(clean_fi.with_suffix(".csv"))
                 data.to_parquet(clean_fi.with_suffix(".parquet"))
-        dataset.append(data)
-    return pd.concat(dataset, axis=0)
 
+        if data is not None:
+            dataset.append(data)
 
-if __name__ == "__main__":
-    download_nemde(start="2021-10-01", end="2021-10-01")
+    try:
+        return pd.concat(dataset, axis=0)
+    except ValueError:
+        return pd.DataFrame()
