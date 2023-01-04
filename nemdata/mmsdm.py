@@ -219,5 +219,4 @@ def download_one_mmsdm(
             print(f" [green]SAVING [/] {clean_fi}")
             data.to_csv(clean_fi.with_suffix(".csv"))
             data.to_parquet(clean_fi.with_suffix(".parquet"))
-
         return data
