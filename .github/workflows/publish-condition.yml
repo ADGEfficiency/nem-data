@@ -9,7 +9,7 @@ on:
 jobs:
   publish-dev:
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.title, 'RELEASE')
+    if: contains(github.event.pull_request.labels.*.name, 'release')
     steps:
       - name: Checkout
         uses: actions/checkout@v3
