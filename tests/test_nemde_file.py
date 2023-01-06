@@ -1,7 +1,8 @@
+import pathlib
+
 import pytest
 
 from nemdata import nemde
-from nemdata.config import DEFAULT_BASE_DIR
 
 
 @pytest.mark.parametrize(
@@ -27,6 +28,8 @@ from nemdata.config import DEFAULT_BASE_DIR
         ),
     ],
 )
-def test_form_nemde_url(year: int, month: int, day: int, expected: str) -> None:
-    file = nemde.make_one_nemde_file(year, month, day, base_directory=DEFAULT_BASE_DIR)
+def test_form_nemde_url(
+    year: int, month: int, day: int, expected: str, base_dir: pathlib.Path
+) -> None:
+    file = nemde.make_one_nemde_file(year, month, day, base_directory=base_dir)
     assert file.url == expected

@@ -1,7 +1,8 @@
+import pathlib
+
 import pytest
 
 from nemdata import mmsdm
-from nemdata.config import DEFAULT_BASE_DIR
 
 
 @pytest.mark.parametrize(
@@ -31,7 +32,7 @@ from nemdata.config import DEFAULT_BASE_DIR
     ],
 )
 def test_form_report_url(
-    year: int, month: int, table: str, name: str, expected: str
+    year: int, month: int, table: str, name: str, expected: str, base_dir: pathlib.Path
 ) -> None:
     mmsdm_table = mmsdm.MMSDMTable(
         name=name,
@@ -39,6 +40,6 @@ def test_form_report_url(
         directory="DATA",
     )
     file = mmsdm.make_one_mmsdm_file(
-        year, month=month, table=mmsdm_table, base_directory=DEFAULT_BASE_DIR
+        year, month=month, table=mmsdm_table, base_directory=base_dir
     )
     assert file.url == expected
