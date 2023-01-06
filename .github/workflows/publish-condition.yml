@@ -1,4 +1,4 @@
-name: publish
+name: publish-dev
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  publish:
+  publish-dev:
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.title, "RELEASE" }}
+    if: ${{ contains(github.event.pull_request.title, "RELEASE") }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
