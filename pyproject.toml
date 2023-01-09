@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nemdata"
-version = "0.3.2"
+version = "0.3.3"
 description = "Simple CLI for downloading data for Australia's NEM from AEMO."
 authors = ["Adam Green <adam.green@adgefficiency.com>"]
 license = "MIT"
