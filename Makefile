@@ -18,31 +18,32 @@ setup-static: setup
 
 test: setup-test
 	pytest tests -s -x
-
 test-ci: setup-test
 	coverage run -m pytest tests --tb=short --show-capture=no
 	coverage report -m
 
 -include .env.secret
-pypi: setup
+publish: setup
 	poetry build
 	@poetry config pypi-token.pypi $(PYPITOKEN)
 	poetry publish
 
-
-#  STATIC TYPING
 .PHONY: static
 static: setup-static
 	mypy **/*.py --config-file ./mypy.ini --pretty
 
-#  CHECKS, FORMATTING & LINTING
-.PHONY: check check
-lint: setup-check
+.PHONY: format
+format: setup-check
 	isort **/*.py --profile black
 	black **/*.py
 	poetry lock --no-update
-check: setup-check
+
+.PHONY: lint
+lint: setup-check
 	flake8 --extend-ignore E501
 	isort --check **/*.py --profile black
 	black --check **/*.py
 	poetry lock --check
+
+.PHONY: check
+check: lint static
