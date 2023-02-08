@@ -17,7 +17,7 @@ setup-static: setup
 	poetry install --with static -q
 
 test: setup-test
-	pytest tests -s -x
+	pytest tests -s -x --color=auto
 test-ci: setup-test
 	coverage run -m pytest tests --tb=short --show-capture=no
 	coverage report -m

@@ -68,7 +68,7 @@ mmsdm_tables = [
     ),
     MMSDMTable(
         name="interconnectors",
-        table="INTERCONNECTORRES",
+        table="DISPATCHINTERCONNECTORRES",
         directory="DATA",
         datetime_columns=["LASTCHANGED", "SETTLEMENTDATE"],
         interval_column="SETTLEMENTDATE",
