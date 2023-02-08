@@ -48,7 +48,19 @@ def test_loader_demand(base_dir: pathlib.Path) -> None:
 
 
 def test_loader_interconnectors(base_dir: pathlib.Path) -> None:
-    download("2019-07", "2019-08", "demand", base_directory=base_dir)
-    data = load(base_directory=base_dir)["demand"]
+    download("2019-07", "2019-08", "interconnectors", base_directory=base_dir)
+    data = load(base_directory=base_dir)["interconnectors"]
     assert data["interval-start"].min() == pd.Timestamp("2019-07-01T00:00:00+1000")
     assert data["interval-start"].max() == pd.Timestamp("2019-08-31T23:55:00+1000")
+
+
+def test_loader_nemde(base_dir: pathlib.Path) -> None:
+    download("2019-07-02", "2019-07-05", "nemde", base_directory=base_dir)
+    data = load(base_directory=base_dir)["nemde"]
+    assert data["interval-start"].min() == pd.Timestamp("2019-07-02T04:00:00+1000")
+    assert data["interval-start"].max() == pd.Timestamp("2019-07-06T03:55:00+1000")
+
+    #  TODO
+    # data = load(base_directory=base_dir, start="2019-07-03", end="2019-07-04")["nemde"]
+    # assert data["interval-start"].min() == pd.Timestamp("2019-07-03T00:00:00+1000")
+    # assert data["interval-start"].max() == pd.Timestamp("2019-08-04T23:55:00+1000")
