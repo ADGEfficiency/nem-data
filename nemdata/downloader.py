@@ -20,6 +20,7 @@ def download(
     tables: dict[str, typing.Callable] = {
         "nemde": download_nemde,
         "trading-price": mmsdm.download_mmsdm,
+        "dispatch-price": mmsdm.download_mmsdm,
         "unit-scada": mmsdm.download_mmsdm,
         "demand": mmsdm.download_mmsdm,
         "interconnectors": mmsdm.download_mmsdm,
