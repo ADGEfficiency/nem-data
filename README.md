@@ -70,7 +70,7 @@ data = nemdata.load()['trading-price']
 
 ## Data
 
-Data is downloaded into into `$HOME/nem-data/data/`:
+Downloaded into into `$HOME/nem-data/data/`:
 
 ```shell-session
 $ nemdata -t trading-price -s 2020-01 -e 2020-02
