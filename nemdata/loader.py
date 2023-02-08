@@ -23,7 +23,8 @@ def concat(report_id: pathlib.Path, pkg: dict, start=None, end=None) -> dict:
     dates = [pd.Timestamp(d.parent.name) for d in data]
     data = [d for d, date in zip(data, dates) if (date >= start) and (date <= end)]
     data = [pd.read_parquet(p) for p in data]
-    pkg[report_id.name] = pd.concat(data, axis=0)
+    data = pd.concat(data, axis=0)
+    pkg[report_id.name] = data.sort_values('interval-start')
     return pkg
 
 
@@ -43,7 +44,8 @@ def concat_trading_price(report_id: pathlib.Path, pkg: dict) -> dict:
             subset["interval-end"] = subset.index + pd.Timedelta("5T")
             datas.append(subset)
 
-    pkg[report_id.name] = pd.concat(datas).reset_index()
+    data = pd.concat(datas).reset_index()
+    pkg[report_id.name] = data.sort_values('interval-start')
     return pkg
 
 
