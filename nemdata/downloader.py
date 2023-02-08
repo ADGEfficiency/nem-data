@@ -16,10 +16,11 @@ def download(
     base_directory: pathlib.Path = DEFAULT_BASE_DIR,
     dry_run: bool = False,
 ) -> pd.DataFrame:
-    print(f"[bold green]Downloader[/]: {table}")
+    print(f"[bold green]nemdata download[/]: {table}")
     tables: dict[str, typing.Callable] = {
         "nemde": download_nemde,
         "trading-price": mmsdm.download_mmsdm,
+        "dispatch-price": mmsdm.download_mmsdm,
         "unit-scada": mmsdm.download_mmsdm,
         "demand": mmsdm.download_mmsdm,
         "interconnectors": mmsdm.download_mmsdm,

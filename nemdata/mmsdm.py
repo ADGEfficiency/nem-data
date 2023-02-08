@@ -31,6 +31,14 @@ class MMSDMTable(pydantic.BaseModel):
 
 mmsdm_tables = [
     MMSDMTable(
+        name="dispatch-price",
+        table="DISPATCHPRICE",
+        directory="DATA",
+        datetime_columns=["SETTLEMENTDATE"],
+        interval_column="SETTLEMENTDATE",
+        frequency=5,
+    ),
+    MMSDMTable(
         name="predispatch",
         table="PREDISPATCHPRICE",
         directory="PREDISP_ALL_DATA",
@@ -68,7 +76,7 @@ mmsdm_tables = [
     ),
     MMSDMTable(
         name="interconnectors",
-        table="INTERCONNECTORRES",
+        table="DISPATCHINTERCONNECTORRES",
         directory="DATA",
         datetime_columns=["LASTCHANGED", "SETTLEMENTDATE"],
         interval_column="SETTLEMENTDATE",
