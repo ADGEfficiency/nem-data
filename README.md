@@ -61,11 +61,13 @@ import nemdata
 data = nemdata.download(start="2020-01", end="2020-02", table="trading-price")
 ```
 
-Load this data back into Python:
+Load this data back into a pandas DataFrame:
 
 ```python
 data = nemdata.load()['trading-price']
 ```
+
+At this point, `data` will have the trading price for all regions.
 
 
 ## Data
@@ -92,6 +94,6 @@ $ tree ~/nem-data
 
 A few things happen during data processing:
 
-- the top & bottom rows of the raw CSV are removed to create a rectangular CSV,
-- `interval-start` and `interval-end` columns are added with timezones,
-- when using `nemdata.loader.loader` for the `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).
+- rows of the raw CSV are removed to create a rectangular, single table CSV,
+- `interval-start` and `interval-end` timezone aware datetime columns are added,
+- when using `nemdata.loader.loader` for `trading-price`, all data is resampled to a 5 minute frequency (both before and after the 30 to 5 minute settlement interval change).
