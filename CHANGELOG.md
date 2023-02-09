@@ -1,3 +1,7 @@
+0.3.4
+- rework conditional publishing based a `publish` label,
+- add dispatch prices as an MMSDM dataset.
+
 0.3.3
 - fix test saving into userspace,
 - added conditional to only publish based on pull requests labelled with `release`.

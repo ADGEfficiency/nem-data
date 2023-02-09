@@ -4,9 +4,6 @@ on:
   push:
     branches: [main]
 
-  pull_request:
-    branches: [main]
-
 jobs:
   publish:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'publish') }}
@@ -22,5 +19,4 @@ jobs:
 
       - name: Publish Package
         run: |
-          echo "publish"
-          # make publish PYPITOKEN=${{ secrets.PYPITOKEN }}
+          make publish PYPITOKEN=${{ secrets.PYPITOKEN }}
