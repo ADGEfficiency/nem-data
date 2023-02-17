@@ -24,6 +24,8 @@ def download(
         "unit-scada": mmsdm.download_mmsdm,
         "demand": mmsdm.download_mmsdm,
         "interconnectors": mmsdm.download_mmsdm,
+        "predispatch":mmsdm.download_mmsdm,
+        "p5min":mmsdm.download_mmsdm,
     }
     return tables[table](
         start,
