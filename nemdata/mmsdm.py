@@ -90,6 +90,14 @@ mmsdm_tables = [
         interval_column="INTERVAL_DATETIME",
         frequency=5,
     ),
+    MMSDMTable(
+        name="predispatch-sensitivities",
+        table="PREDISPATCHPRICESENSITIVITIE_D",
+        directory="DATA",
+        datetime_columns=["LASTCHANGED", "DATETIME"],
+        interval_column="DATETIME",
+        frequency=30,
+    ),
 ]
 
 

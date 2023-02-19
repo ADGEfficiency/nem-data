@@ -26,6 +26,7 @@ def download(
         "interconnectors": mmsdm.download_mmsdm,
         "predispatch":mmsdm.download_mmsdm,
         "p5min":mmsdm.download_mmsdm,
+        "predispatch-sensitivities":mmsdm.download_mmsdm
     }
     return tables[table](
         start,
