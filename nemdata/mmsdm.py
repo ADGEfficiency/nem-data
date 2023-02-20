@@ -98,6 +98,14 @@ mmsdm_tables = [
         interval_column="DATETIME",
         frequency=30,
     ),
+    MMSDMTable(
+        name="predispatch-demand",
+        table="PREDISPATCHREGIONSUM",
+        directory="PREDISP_ALL_DATA",
+        datetime_columns=["LASTCHANGED", "DATETIME"],
+        interval_column="DATETIME",
+        frequency=30,
+    ),
 ]
 
 
