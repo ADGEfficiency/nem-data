@@ -12,7 +12,7 @@ def concat(
     pkg: dict,
     start: typing.Union[str, None] = None,
     end: typing.Union[str, None] = None,
-    columns=None,
+    columns: typing.Union[list[str], None] = None,
 ) -> dict:
     data = [p for p in report_id.glob("**/clean.parquet")]
 
@@ -34,7 +34,11 @@ def concat(
     return pkg
 
 
-def concat_trading_price(report_id: pathlib.Path, pkg: dict, columns=None) -> dict:
+def concat_trading_price(
+    report_id: pathlib.Path,
+    pkg: dict,
+    columns: typing.Union[list[str], None] = None,
+) -> dict:
     fis = [p for p in report_id.glob("**/clean.parquet")]
     datas = []
     for fi in fis:
@@ -58,7 +62,7 @@ def concat_trading_price(report_id: pathlib.Path, pkg: dict, columns=None) -> di
 def load(
     desired_reports: typing.Union[list, str, None] = None,
     *,
-    columns=None,
+    columns: typing.Union[list[str], None] = None,
     base_directory: pathlib.Path = DEFAULT_BASE_DIR,
 ) -> dict:
     pkg: dict = {}
