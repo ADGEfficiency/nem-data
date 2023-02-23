@@ -82,6 +82,30 @@ mmsdm_tables = [
         interval_column="SETTLEMENTDATE",
         frequency=5,
     ),
+    MMSDMTable(
+        name="p5min",
+        table="P5MIN_REGIONSOLUTION_ALL",
+        directory="P5MIN_ALL_DATA",
+        datetime_columns=["RUN_DATETIME", "INTERVAL_DATETIME", "LASTCHANGED"],
+        interval_column="INTERVAL_DATETIME",
+        frequency=5,
+    ),
+    MMSDMTable(
+        name="predispatch-sensitivities",
+        table="PREDISPATCHPRICESENSITIVITIE_D",
+        directory="DATA",
+        datetime_columns=["LASTCHANGED", "DATETIME"],
+        interval_column="DATETIME",
+        frequency=30,
+    ),
+    MMSDMTable(
+        name="predispatch-demand",
+        table="PREDISPATCHREGIONSUM",
+        directory="PREDISP_ALL_DATA",
+        datetime_columns=["LASTCHANGED", "DATETIME"],
+        interval_column="DATETIME",
+        frequency=30,
+    ),
 ]
 
 
