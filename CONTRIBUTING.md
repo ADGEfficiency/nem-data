@@ -1,3 +1,9 @@
+## Pull Requests
+
+Prefix pull requests with one of `[TECH], [FEATURE], [BUG]`.
+
+Include tests - especially if you are introducing code that is not covered by existing tests.
+
 # Adding MMSDM Tables
 
 1. Add `MMSDMTable` objects into `nemdata/mmsdm.py`,
