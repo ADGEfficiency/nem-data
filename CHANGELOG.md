@@ -1,4 +1,4 @@
-0.3.5
+0.3.6
 - add MMSDM tables predispatch sensitivities, predispatch demand & predispatch prices,
 - allow user to limit columns on load,
 - more fun with conditional publishing - now release based on Git tags.
