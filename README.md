@@ -31,7 +31,8 @@ Usage: nemdata [OPTIONS]
 Options:
   -t, --table TEXT          Available tables: nemde, dispatch-price,
                             predispatch, unit-scada, trading-price, demand,
-                            interconnectors.
+                            interconnectors, p5min, predispatch-sensitivities,
+                            predispatch-demand.
   -s, --start TEXT          Start date (YYYY-MM or YYYY-MM-DD for NEMDE).
   -e, --end TEXT            End date (incusive) (YYYY-MM or YYYY-MM-DD for
                             NEMDE).
