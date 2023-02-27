@@ -6,7 +6,8 @@ on:
 
 jobs:
   publish:
-    if: ${{ contains(github.event.pull_request.title, '[RELEASE]') }}
+    #  run on any tagged commit
+    if: startsWith(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
