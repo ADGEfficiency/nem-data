@@ -1,11 +1,8 @@
 [tool.poetry]
 name = "nemdata"
-version = "0.3.5"
+version = "0.3.4"
 description = "Simple CLI for downloading data for Australia's NEM from AEMO."
-authors = [
-  "Adam Green <adam.green@adgefficiency.com>",
-  "Johannes Hendriks <https://github.com/jnh277>"
-]
+authors = ["Adam Green <adam.green@adgefficiency.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "nemdata"}]
