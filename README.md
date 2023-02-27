@@ -10,11 +10,13 @@ It is designed for use by researchers & data scientists - this tool supports my 
 
 See [A Hackers Guide to AEMO & NEM Data](https://adgefficiency.com/hackers-aemo/) for more context on the data provided by AEMO.
 
+
 ## Setup
 
 ```bash
 $ pip install nemdata
 ```
+
 
 ## Use
 
@@ -29,8 +31,7 @@ Usage: nemdata [OPTIONS]
 Options:
   -t, --table TEXT          Available tables: nemde, dispatch-price,
                             predispatch, unit-scada, trading-price, demand,
-                            interconnectors, p5min, predispatch-sensitivities,
-                            predispatch-demand.
+                            interconnectors.
   -s, --start TEXT          Start date (YYYY-MM or YYYY-MM-DD for NEMDE).
   -e, --end TEXT            End date (incusive) (YYYY-MM or YYYY-MM-DD for
                             NEMDE).
@@ -66,7 +67,8 @@ Load this data back into a pandas DataFrame:
 data = nemdata.load()['trading-price']
 ```
 
-`data` has the trading price for all regions.
+At this point, `data` will have the trading price for all regions.
+
 
 ## Data
 
