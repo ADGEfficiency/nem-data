@@ -1,3 +1,6 @@
+0.3.7
+- [fix bug with Pandas and Numpy 2.0](https://github.com/ADGEfficiency/nem-data/issues/34).
+
 0.3.6
 - add MMSDM tables predispatch sensitivities, predispatch demand & predispatch prices,
 - allow user to limit columns on load,
