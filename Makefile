@@ -5,16 +5,17 @@ all: test
 clean:
 	rm -rf ~/nem-data/data
 
+QUIET=-q
 setup:
-	pip install pip -Uq
-	pip install poetry==1.2.2 -q
-	poetry install -q
+	pip install pip -U $(QUIET)
+	pip install poetry==1.8.4 $(QUIET)
+	poetry install $(QUIET) --without test,dev,check,static
 setup-test: setup
-	poetry install --with test
+	poetry install --with test $(QUIET)
 setup-check: setup
-	poetry install --with check -q
+	poetry install --with check $(QUIET)
 setup-static: setup
-	poetry install --with static -q
+	poetry install --with static $(QUIET)
 
 test: setup-test
 	pytest tests -s -x --color=auto
